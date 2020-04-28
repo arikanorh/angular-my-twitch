@@ -7,10 +7,9 @@ import { TwitchService } from '../twitch.service';
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.css']
 })
-export class GamesComponent implements OnInit,OnDestroy {
+export class GamesComponent implements OnInit {
   games;
-  listener;
-
+ 
   constructor(private twitch:TwitchService){
  
   }
@@ -22,12 +21,5 @@ export class GamesComponent implements OnInit,OnDestroy {
       }
     );
 
-    this.listener = document.addEventListener('keydown',(e:KeyboardEvent)=>{
-      console.log(e.key);
-    });
-  }
-
-  ngOnDestroy(){
-    document.removeEventListener('keypress',this.listener);
   }
 }
