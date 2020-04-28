@@ -1,0 +1,8 @@
+<app-game 
+  *ngFor="let game of games ;let i = index" 
+  [attr.tabindex]="i+1"  
+  [value]="game" 
+  [routerLink]="['/channels',game.game.name]"
+  autofocus
+  >
+</app-game>

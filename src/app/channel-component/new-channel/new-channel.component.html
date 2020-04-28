@@ -1,0 +1,15 @@
+<div class='stream_img' (click)="handleClick()">
+	<img [src]="url" class="img" draggable="false">
+		<div class="title">
+	{{channel.user_name}}
+		</div>
+		<div class="mobile" (click)="goMobile()">
+			M
+		</div>
+	<div class="content">
+
+		<div>{{game_name}} - {{channel.viewer_count}} viewers</div>
+		<div id='channel_status'>{{ channel.title }}</div>
+	</div>
+
+</div>
