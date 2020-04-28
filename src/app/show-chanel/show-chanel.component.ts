@@ -8,18 +8,18 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ["./show-chanel.component.css"]
 })
 export class ShowChanelComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private sanitizer: DomSanitizer) {}
-  ngOnInit() {
 
-  }
-  url() {
+  url;
+  constructor(private route: ActivatedRoute, private sanitizer: DomSanitizer) {}
+  
+  ngOnInit() {
+ 
     let id = this.route.snapshot.params.id;
-    let src = this.sanitizer.bypassSecurityTrustResourceUrl(
+    this.url = this.sanitizer.bypassSecurityTrustResourceUrl(
       "https://player.twitch.tv/?channel=" + id + "&html5=1"
     );
 
-    return src;
-  }
+   }
    
  
 
