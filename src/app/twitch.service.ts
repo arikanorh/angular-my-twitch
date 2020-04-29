@@ -10,7 +10,7 @@ export class TwitchService {
   constructor(private httpService: HttpClient) {}
 
   public getChannelsOfGame(game: string) {
-    return this.httpService.get(
+    return this.httpService.get<any>(
       "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&game=" +
         game +
         "&limit=100"
@@ -19,7 +19,7 @@ export class TwitchService {
 
   public getGames() {
     return this.httpService
-      .get(
+      .get<any>(
         "https://api.twitch.tv/kraken/games/top?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100&offset=0"
       )
       .pipe(
@@ -48,7 +48,7 @@ export class TwitchService {
   public getMyFollowedChannel() {
     var channels = [];
     return this.httpService
-      .get(
+      .get<any>(
         "https://api.twitch.tv/helix/users/follows?first=100&from_id=" +
           this.user_id,
         {
@@ -78,7 +78,7 @@ export class TwitchService {
 
   public getStreamOfUserIds(user_ids) {
     return this.httpService
-      .get("https://api.twitch.tv/helix/streams?" + user_ids, {
+      .get<any>("https://api.twitch.tv/helix/streams?" + user_ids, {
         headers: {
           "Client-ID": "1e4gz76ye3w3f71ic955m4seb8jfph"
         }
