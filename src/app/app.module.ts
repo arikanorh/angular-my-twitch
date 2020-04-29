@@ -32,7 +32,7 @@ import { environment } from '../environments/environment';
       { path: "mychannels", component: MychannelsComponent }
     ], { useHash: true }),
     MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled:true })
   ],
   declarations: [
     AppComponent,
