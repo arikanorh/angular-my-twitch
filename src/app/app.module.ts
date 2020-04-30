@@ -3,7 +3,6 @@ import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 
 import { AppComponent } from "./app.component";
-import { HelloComponent } from "./hello.component";
 import { HttpClientModule } from "@angular/common/http";
 import { ChannelComponentComponent } from "./channel-component/channel-component.component";
 import { GameComponent } from "./game/game.component";
@@ -17,35 +16,44 @@ import { NewChannelComponent } from "./channel-component/new-channel/new-channel
 import { MatIconModule } from "@angular/material/icon";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { LogoComponent } from './logo/logo.component';
+import { ModalComponent } from './modal/modal.component';
+import { NavigatablelistDirective } from './navigatablelist.directive';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    RouterModule.forRoot([
-      { path: "", redirectTo: "mychannels", pathMatch: "full" },
-      { path: "games", component: GamesComponent },
-      { path: "channels", component: ChannelsComponent },
-      { path: "channels/:id", component: ChannelsComponent },
-      { path: "show/:id", component: ShowChanelComponent },
-      { path: "mychannels", component: MychannelsComponent }
-    ], { useHash: true }),
+   imports: [
+      BrowserModule,
+      FormsModule,
+      HttpClientModule,
+      RouterModule.forRoot([
+        { path: "", redirectTo: "mychannels", pathMatch: "full" },
+        { path: "games", component: GamesComponent },
+        { path: "channels", component: ChannelsComponent },
+        { path: "channels/:id", component: ChannelsComponent },
+        { path: "show/:id", component: ShowChanelComponent },
+        { path: "mychannels", component: MychannelsComponent }
+      ], { useHash: true }),
     MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled:true })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [
     AppComponent,
-    HelloComponent,
     ChannelComponentComponent,
     GameComponent,
     ChannelsComponent,
     GamesComponent,
     ShowChanelComponent,
     MychannelsComponent,
-    NewChannelComponent
+    NewChannelComponent,
+    LogoComponent,
+    ModalComponent,
+    NavigatablelistDirective
   ],
   bootstrap: [AppComponent],
   providers: [TwitchService]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(twitch:TwitchService){
+    twitch.loadFavs();
+  }
+}

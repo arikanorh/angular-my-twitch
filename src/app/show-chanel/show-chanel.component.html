@@ -1,6 +1,6 @@
  
 
-<iframe id="video" #video
+<iframe id="video" #video *ngIf="url"
         src=""
         height="100%"
         width="100%"
@@ -9,3 +9,7 @@
         allowfullscreen="true"
         [src]="url">
 </iframe>
+
+<app-modal #modal appNavigatablelist>
+        <app-new-channel #nav *ngFor="let channel of data$ | async" [channel]="channel" ></app-new-channel>
+</app-modal>

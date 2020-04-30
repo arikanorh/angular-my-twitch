@@ -2,10 +2,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, switchMap, tap } from "rxjs/operators";
 import { games } from "./games";
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class TwitchService {
   private user_id = "127194472"; // Gargamelion's channel client_id
+  private _favs = new BehaviorSubject(null);
+  private favs$ = this._favs.asObservable();
 
   constructor(private httpService: HttpClient) {}
 
@@ -37,7 +40,7 @@ export class TwitchService {
       );
   }
 
-  public getMyFollowedStreams() {
+  getMyFollowedStreams() {
     return this.getMyFollowedChannel().pipe(
       switchMap(e =>
         this.getStreamOfUserIds(e.map(i => "user_id=" + i).join("&"))
@@ -45,7 +48,7 @@ export class TwitchService {
     );
   }
 
-  public getMyFollowedChannel() {
+  getMyFollowedChannel() {
     var channels = [];
     return this.httpService
       .get<any>(
@@ -96,5 +99,17 @@ export class TwitchService {
           return result;
         })
       );
+  }
+
+  public loadFavs(){
+  
+    this.getMyFollowedStreams().subscribe(e=>{
+      this._favs.next(e);
+     })
+
+  }
+  public getFavStreams(){
+    this.loadFavs();
+    return this.favs$;
   }
 }

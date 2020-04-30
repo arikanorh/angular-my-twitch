@@ -1,2 +1,6 @@
-   <app-new-channel *ngFor="let channel of data" [channel]="channel"></app-new-channel>
+<ng-container appNavigatablelist>
+
+   <app-new-channel #nav *ngFor="let channel of data$ | async" [channel]="channel"></app-new-channel>
+</ng-container>
  
+  

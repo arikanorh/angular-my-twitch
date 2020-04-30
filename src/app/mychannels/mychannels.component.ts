@@ -8,15 +8,12 @@ import { TwitchService } from '../twitch.service';
 })
 export class MychannelsComponent implements OnInit {
 
-  data;
+  data$;
 
   constructor(private twitch:TwitchService) { }
 
   ngOnInit() {
-    this.twitch.getMyFollowedStreams().subscribe(e=>{
-      this.data = e;
-     })
-
+     this.data$=this.twitch.getFavStreams();
   }
 
 }
