@@ -14,27 +14,32 @@ import { TwitchService } from "./twitch.service";
 import { MychannelsComponent } from "./mychannels/mychannels.component";
 import { NewChannelComponent } from "./channel-component/new-channel/new-channel.component";
 import { MatIconModule } from "@angular/material/icon";
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import { LogoComponent } from './logo/logo.component';
-import { ModalComponent } from './modal/modal.component';
-import { NavigatablelistDirective } from './navigatablelist.directive';
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { environment } from "../environments/environment";
+import { LogoComponent } from "./logo/logo.component";
+import { ModalComponent } from "./modal/modal.component";
+import { NavigatablelistDirective } from "./navigatablelist.directive";
 
 @NgModule({
-   imports: [
-      BrowserModule,
-      FormsModule,
-      HttpClientModule,
-      RouterModule.forRoot([
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(
+      [
         { path: "", redirectTo: "mychannels", pathMatch: "full" },
         { path: "games", component: GamesComponent },
         { path: "channels", component: ChannelsComponent },
         { path: "channels/:id", component: ChannelsComponent },
         { path: "show/:id", component: ShowChanelComponent },
         { path: "mychannels", component: MychannelsComponent }
-      ], { useHash: true }),
+      ],
+      { useHash: true }
+    ),
     MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   declarations: [
     AppComponent,
@@ -52,16 +57,17 @@ import { NavigatablelistDirective } from './navigatablelist.directive';
   bootstrap: [AppComponent],
   providers: [TwitchService]
 })
-export class AppModule     { 
-  constructor(twitch:TwitchService){
+export class AppModule {
+  constructor(twitch: TwitchService) {
     twitch.loadFavs();
- 
-     document.addEventListener('visibilitychange',e=>{
-      console.log(document.visibilityState);
-    })
+
+    document.addEventListener("visibilitychange", e => {
+      if (document.visibilityState === "visible") {
+        console.log("Refreshing favs if production ",environment.production);
+        if (environment.production) {
+          twitch.loadFavs();
+        }
+      }
+    });
   }
-
-  
-
-
 }
