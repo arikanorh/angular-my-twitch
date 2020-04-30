@@ -52,17 +52,16 @@ import { NavigatablelistDirective } from './navigatablelist.directive';
   bootstrap: [AppComponent],
   providers: [TwitchService]
 })
-export class AppModule implements OnInit { 
+export class AppModule     { 
   constructor(twitch:TwitchService){
     twitch.loadFavs();
-  }
-
-  ngOnInit(){
-    console.log("A");
-    document.addEventListener('visibilitychange',e=>{
+ 
+     document.addEventListener('visibilitychange',e=>{
       console.log(document.visibilityState);
     })
   }
+
+  
 
 
 }
