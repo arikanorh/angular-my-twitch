@@ -10,6 +10,6 @@
         [src]="url">
 </iframe>
 
-<app-modal #modal appNavigatablelist>
-        <app-new-channel #nav *ngFor="let channel of data$ | async" [channel]="channel" ></app-new-channel>
+<app-modal >
+        <app-mychannels></app-mychannels>
 </app-modal>
