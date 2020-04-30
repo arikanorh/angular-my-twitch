@@ -61,9 +61,12 @@
     border-radius: 3px;
     border: 1px solid;
 }
+/*
 :host:hover .mobile{
   display: flex;
 }
+*/
+
 .mobile:hover{
   opacity: 1;
   border: 1px solid #7550ba;

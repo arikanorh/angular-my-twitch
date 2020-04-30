@@ -30,10 +30,12 @@ export class ShowChanelComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.url = this.getUrl(params.id);
-
     })
 
-    this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
+  
+ 
+    this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
+      console.log(e.key);
       if (e.key === "ArrowUp") {
         if (!this.modal.isShowing()) {
           this.modal.show();
