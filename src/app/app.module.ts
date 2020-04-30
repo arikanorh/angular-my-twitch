@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule, OnInit } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 
@@ -52,8 +52,17 @@ import { NavigatablelistDirective } from './navigatablelist.directive';
   bootstrap: [AppComponent],
   providers: [TwitchService]
 })
-export class AppModule { 
+export class AppModule implements OnInit { 
   constructor(twitch:TwitchService){
     twitch.loadFavs();
   }
+
+  ngOnInit(){
+    console.log("A");
+    document.addEventListener('visibilitychange',e=>{
+      console.log(document.visibilityState);
+    })
+  }
+
+
 }
