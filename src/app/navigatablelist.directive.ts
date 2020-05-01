@@ -29,7 +29,7 @@ export class NavigatablelistDirective
         this.focusCurrentElement();
       }
     } catch (err) {}
-  }
+  } 
 
   ngAfterViewInit(): void {
     let array = this.channels.toArray();

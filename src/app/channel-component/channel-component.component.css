@@ -1,65 +1,61 @@
-.img{
-  height: 180px;
-  width: 320px;
-}
-
 .stream_img {
-    max-width: 320px;
-    height: 232px;
-    display: inline-block;
-    margin: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-radius: 5px;
-    padding: 5px;
-    border: 2px solid #FFF;
-    cursor: pointer;
-     position: relative;
+  width: 320px;
+  height: 232px;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 2px;
+  border: 2px solid #FFF;
+  cursor: pointer;
 
 }
+.img-panel{
+  height: 180px;
+  position: relative;
+}
+
 
 :host:focus{
   outline: none;
 }
 :host:hover .stream_img,
 :host:focus .stream_img {
-
-    border: 2px solid #7550ba;
-    outline:none;
+  border: 2px solid #7550ba;
+  outline:none;
 }
 
 .content{
-  padding: 5px;
+  padding: 5px 0;
   display: flex;
   flex-direction: column;
 }
+
 .title{
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-weight: bold;
-    background: #7550ba;
-    opacity: 1;
-    padding: 5px;
-    border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  font-weight: bold;
+  background: #7550ba;
+  padding: 5px;
+  border-radius: 4px;
+  margin: 5px;
 }
+
 .mobile{
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 10px;
-    background: white;
-    display: none;
-    opacity: 0.7;
-    color: #7550ba;
-    width: 15px;
-    height: 15px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-    border: 1px solid;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 10px;
+  background: white;
+  display: none;
+  opacity: 0.7;
+  color: #7550ba;
+  width: 15px;
+  height: 15px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  border: 1px solid;
 }
 /*
 :host:hover .mobile{
@@ -70,4 +66,29 @@
 .mobile:hover{
   opacity: 1;
   border: 1px solid #7550ba;
+}
+
+.channel-status{
+  font-size:smaller;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewer-count{
+  display: inline;
+  position: absolute;
+  left:0;
+  bottom:0;
+  margin: 5px;
+  background: #302a2a;
+  font-size: small;
+  border-radius: 2px;
+  color: white;
+  padding: 2px;
+}
+
+.game-name{
+  font-weight: bold;
 }
