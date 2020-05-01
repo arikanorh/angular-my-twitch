@@ -46,7 +46,7 @@ export class ShowChanelComponent implements OnInit {
       } else if (e.key === "ArrowDown") {
         this.modal.hide();
       } else if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        this.modal.show();
+        this.modal.show(); 
       }
     });
     this.data$ = this.twitch.getFavStreams();
