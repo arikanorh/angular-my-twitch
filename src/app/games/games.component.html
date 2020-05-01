@@ -1,8 +1,10 @@
+<ng-container appNavigatablelist>
 
 <app-game
+  #nav
   *ngFor="let game of games ;let i = index" 
   [attr.tabindex]="i+1"  
   [value]="game" 
   [routerLink]="['/channels',game.game.name]"
   >
-</app-game>
+</app-game></ng-container>
