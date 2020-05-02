@@ -9,6 +9,7 @@ import {
   OnDestroy
 } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
+import { TwitchService } from './twitch.service';
 
 @Directive({
   selector: "[appNavigatablelist]"
@@ -20,7 +21,7 @@ export class NavigatablelistDirective
   listener;
   sub: Subscription;
 
-  constructor(private el: ElementRef) { }
+  constructor(private twitch:TwitchService) { }
 
   ngAfterContentChecked() {
     try {
@@ -44,6 +45,9 @@ export class NavigatablelistDirective
         this.focusIndex++;
         this.focusCurrentElement();
       } else if (e.key === "ArrowUp") {
+        if(this.focusIndex==0){
+            this.twitch.loadFavs();
+        }
         this.focusIndex--;
         this.focusCurrentElement();
       } else if (e.key === "Enter") {
