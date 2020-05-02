@@ -1,16 +1,19 @@
-<div class='stream_img' (click)="handleClick()">
-	<div [style.background-image]="getBackground()" class="img" draggable="false">
+<div class='stream_img'>
+	<div class="img-panel">
+
+		<img [src]="channel_image" class="img" draggable="false">
 		<div class="title">
 			{{channgel_display_name}}
 		</div>
-    <div class="mobile" (click)="goMobile()">
-      M
-    </div>
+		<div class="mobile" (click)="goMobile()">
+			M
+		</div>
+    <div class="viewer-count">{{viewers}} viewers</div>
 	</div>
 	<div class="content">
 
-		<div>{{viewers}} viewers</div>
-		<div id='channel_status'>{{ channel_status }}</div>
+		<div class="game-name">{{game_name || 'N/A'}}</div>
+		<div class='channel-status'>{{ channel_status }}</div>
 	</div>
 
 </div>

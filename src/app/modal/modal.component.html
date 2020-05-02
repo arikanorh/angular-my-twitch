@@ -7,15 +7,6 @@
     <div class="content">
       <ng-content></ng-content>
     </div>
-    <div class="footer">
-      <div class="footer-left">
-        <ng-content select="app-button.left">
-        </ng-content>
-      </div>
-      <div class="footer-right">
-        <ng-content select="app-button"></ng-content>
-       </div>
-    </div>
   </div>
 </div>
 <div id="overlay" class="overlay" (click)="hide()" [class.hidden]="!showModal"></div>

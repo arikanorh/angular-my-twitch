@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, switchMap, tap } from "rxjs/operators";
 import { games } from "./games";
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class TwitchService {
@@ -109,7 +110,6 @@ export class TwitchService {
 
   }
   public getFavStreams(){
-    this.loadFavs();
     return this.favs$;
   }
 }

@@ -15,16 +15,19 @@ export class ChannelComponentComponent implements OnInit {
   channgel_display_name;
   channel_status;
   viewers;
+  game_name;
 
   constructor(private _sanitizer: DomSanitizer,private router:Router) {}
 
   ngOnInit() {
+    console.log(this.value);
     this.channel_name = this.value.channel.name;
     this.channel_id = this.value.channel._id;
     this.channel_image = this.value.preview.medium;
     this.channgel_display_name = this.value.channel.display_name;
     this.channel_status = this.value.channel.status;
     this.viewers = this.value.viewers;
+    this.game_name = this.value.game;
   }
   getBackground() {
     return this._sanitizer.bypassSecurityTrustStyle(

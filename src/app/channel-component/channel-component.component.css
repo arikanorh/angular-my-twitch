@@ -1,30 +1,46 @@
+:host{
+  max-width: 420px;
+  flex: 1;
+  min-width: 300px;
+  margin: 10px;
+}
+
 .stream_img {
-  width: 320px;
-  height: 232px;
   display: inline-block;
   border-radius: 5px;
-  padding: 2px;
-  border: 2px solid #FFF;
   cursor: pointer;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: box-shadow 0.3s;
+  padding: 2px;
 
 }
 .img-panel{
-  height: 180px;
-  position: relative;
+   position: relative;
+}
+.img{
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
 }
 
 
 :host:focus{
   outline: none;
 }
-:host:hover .stream_img,
+
+:host:hover .stream_img{
+  outline: 2px solid #ba5050;
+}
+
 :host:focus .stream_img {
-  border: 2px solid #7550ba;
-  outline:none;
+  outline: 2px solid #7550ba;
 }
 
 .content{
-  padding: 5px 0;
+  padding: 5px 5px;
   display: flex;
   flex-direction: column;
 }
@@ -36,7 +52,7 @@
   color: white;
   font-weight: bold;
   background: #7550ba;
-  padding: 5px;
+  padding: 0 5px;
   border-radius: 4px;
   margin: 5px;
 }
@@ -79,8 +95,8 @@
 .viewer-count{
   display: inline;
   position: absolute;
-  left:0;
-  bottom:0;
+  right:0;
+  top:0;
   margin: 5px;
   background: #302a2a;
   font-size: small;

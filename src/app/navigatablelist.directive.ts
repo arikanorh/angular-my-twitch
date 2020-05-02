@@ -20,7 +20,7 @@ export class NavigatablelistDirective
   listener;
   sub: Subscription;
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef) { }
 
   ngAfterContentChecked() {
     try {
@@ -28,18 +28,10 @@ export class NavigatablelistDirective
         this.focusIndex = 0;
         this.focusCurrentElement();
       }
-    } catch (err) {}
-  } 
+    } catch (err) { }
+  }
 
   ngAfterViewInit(): void {
-    let array = this.channels.toArray();
-    if (array.length !== 0) {
-      this.setTabIndexesAndFocus(array);
-    } else
-      this.sub = this.channels.changes.subscribe(items => {
-        let array = items.toArray();
-        this.setTabIndexesAndFocus(array);
-      });
 
     this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
       if (!this.hasCurrentFocus()) {
@@ -48,15 +40,11 @@ export class NavigatablelistDirective
         return;
       }
 
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArrowDown") {
         this.focusIndex++;
-        this.focusIndex =
-          this.focusIndex >= this.channels.length ? 0 : this.focusIndex;
         this.focusCurrentElement();
-      } else if (e.key === "ArrowLeft") {
+      } else if (e.key === "ArrowUp") {
         this.focusIndex--;
-        this.focusIndex =
-          this.focusIndex < 0 ? this.channels.length - 1 : this.focusIndex;
         this.focusCurrentElement();
       } else if (e.key === "Enter") {
         this.channels.toArray()[this.focusIndex].nativeElement.click();
@@ -71,9 +59,10 @@ export class NavigatablelistDirective
   }
 
   focusCurrentElement() {
-    if (this.focusIndex < 0) this.focusIndex = this.channels.length - 1;
-    else if (this.focusIndex >= this.channels.length) {
+    if (this.focusIndex < 0)
       this.focusIndex = 0;
+    else if (this.focusIndex >= this.channels.length) {
+      this.focusIndex = this.channels.length - 1;
     }
     let element = this.channels.toArray()[this.focusIndex].nativeElement;
     element.focus();
@@ -84,12 +73,4 @@ export class NavigatablelistDirective
     return elem === document.activeElement;
   }
 
-  private setTabIndexesAndFocus(elements: ElementRef[]) {
-    for (let index = 0; index < elements.length; index++) {
-      let element = elements[index];
-      element.nativeElement.setAttribute("tabindex", index);
-    }
-    this.focusIndex = 0;
-    this.focusCurrentElement();
-  }
 }

@@ -61,23 +61,3 @@
     font-weight: bold;
 
 }
-
-.footer {
-    display: flex;
-     border-top: 1px solid;
-    padding-top: 10px;
-}
-.footer-right{
-    display: flex;
-    justify-content: flex-end;
-    flex: 1;
-}
-.footer-left{
-    display: flex;
-    justify-content: flex-start;
-    flex: 1;
-}
-
-.footer app-button {
-    margin-left: 5px;
-}

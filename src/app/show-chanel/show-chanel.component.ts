@@ -19,17 +19,17 @@ import { NewChannelComponent } from "../channel-component/new-channel/new-channe
   styleUrls: ["./show-chanel.component.css"]
 })
 export class ShowChanelComponent implements OnInit {
-  @ViewChild("video") video: ElementRef;
-  @ViewChild(ModalComponent) modal: ModalComponent;
+  @ViewChild("wrapper") video: ElementRef;
   @ViewChild(ModalComponent, { read: ElementRef }) modalRef: ElementRef;
   data$;
   url;
   listener;
+  showList: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private twitch: TwitchService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -38,15 +38,20 @@ export class ShowChanelComponent implements OnInit {
 
     this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
       console.log(e.key);
-      if (e.key === "ArrowUp") {
-        if (!this.modal.isShowing()) {
-          // this.modal.show();
+      if (e.key === "Enter") {
+        if(!this.showList){
           this.video.nativeElement.webkitRequestFullScreen();
         }
       } else if (e.key === "ArrowDown") {
-        this.modal.hide();
-      } else if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        this.modal.show(); 
+       // this.showList = false;
+        // this.modal.hide();
+      } else if (e.key === "ArrowRight") {
+        //  this.modal.show(); 
+        this.showList = true;
+      }
+      else if (e.key === "ArrowLeft") {
+        //  this.modal.show(); 
+        this.showList = false;
       }
     });
     this.data$ = this.twitch.getFavStreams();
