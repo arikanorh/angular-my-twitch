@@ -8,9 +8,6 @@ p {
   align-items: center;
   font-size:20px;
   color:white;
-  position: fixed;
-  top: 0;
-  width: 100%;
 }
 .nav-link{
   height: 100%;
@@ -39,7 +36,6 @@ p {
 .router{
   flex: 1;
   overflow: auto;
-  margin-top: 50px;
 }
 .nav-left{
   display: flex;

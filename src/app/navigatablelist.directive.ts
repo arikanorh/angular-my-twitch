@@ -41,10 +41,10 @@ export class NavigatablelistDirective
         return;
       }
 
-      if (e.key === "ArrowDown") {
+      if (e.key === "ArrowRight") {
         this.focusIndex++;
         this.focusCurrentElement();
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === "ArrowLeft") {
         if(this.focusIndex==0){
             this.twitch.loadFavs();
         }

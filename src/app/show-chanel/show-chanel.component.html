@@ -2,18 +2,21 @@
 
 <div #wrapper class="wrapper">
 
-        <iframe id="video" #video *ngIf="url"
-        src=""
-        height="100%"
-        width="100%"
-        frameborder="0"
-        scrolling="no"
-        allowfullscreen="true"
-        tabindex="0"
-        [src]="url">
-</iframe>
-<app-mychannels class="channels" [class.visible]="showList"></app-mychannels>
+  <iframe id="video" #video *ngIf="url"
+    src=""
+    height="100%"
+    width="100%"
+    frameborder="0"
+    scrolling="no"
+    allowfullscreen="true"
+    tabindex="0"
+    [src]="url">
+  </iframe>
+  <app-mychannels 
+    class="channels" 
+    [class.visible]="showList">
+  </app-mychannels>
 
 </div>
 
- 
+  

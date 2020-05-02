@@ -38,12 +38,12 @@ export class ShowChanelComponent implements OnInit {
 
     this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
       console.log(e.key);
-      if (e.key === "Enter") {
+      if (e.key === "ArrowUp") {
         if(!this.showList){
-          this.video.nativeElement.webkitRequestFullScreen();
+          this.video.nativeElement.webkitRequestFullScreen(); 
         }
       } else if (e.key === "ArrowDown") {
-       // this.showList = false;
+        this.showList = false;
         // this.modal.hide();
       } else if (e.key === "ArrowRight") {
         //  this.modal.show(); 
@@ -51,7 +51,7 @@ export class ShowChanelComponent implements OnInit {
       }
       else if (e.key === "ArrowLeft") {
         //  this.modal.show(); 
-        this.showList = false;
+        this.showList = true;
       }
     });
     this.data$ = this.twitch.getFavStreams();

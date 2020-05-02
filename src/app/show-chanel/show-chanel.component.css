@@ -1,16 +1,17 @@
 .wrapper{
     position: relative;
     overflow: hidden;
+    height: 100%
 }
 .channels{
-    position: fixed;
+    position: absolute;
+    top:0;
     right: 0;
-    top: 50;
     background: white;
     width: 320px;
     transform: translateX(320px);
     transition: transform 200ms ease-in;
-    overflow: auto;
+    overflow: auto; 
     height: 100%;
 
 
