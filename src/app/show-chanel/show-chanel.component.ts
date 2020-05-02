@@ -20,7 +20,6 @@ import { NewChannelComponent } from "../channel-component/new-channel/new-channe
 })
 export class ShowChanelComponent implements OnInit {
   @ViewChild("wrapper") video: ElementRef;
-  @ViewChild(ModalComponent, { read: ElementRef }) modalRef: ElementRef;
   data$;
   url;
   listener;
@@ -42,18 +41,13 @@ export class ShowChanelComponent implements OnInit {
           this.video.nativeElement.webkitRequestFullScreen();
         }
       } else if (e.key === "ArrowRight") {
-        this.showList = !this.showList;
+        this.toggleShow();
         // this.modal.hide();
       } else if (e.key === "ArrowLeft") {
-        //  this.modal.show();
-        this.showList = !this.showList;
-      } else if (e.key === "ArrowLeft") {
-        //  this.modal.show();
-        this.showList = true;
+        this.toggleShow();
       } else if (e.key === "Enter") {
         this.showList = false;
       } else if (e.key === "ArrowDown") {
-         
       }
     });
     this.data$ = this.twitch.getFavStreams();
@@ -66,5 +60,14 @@ export class ShowChanelComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       "https://player.twitch.tv/?channel=" + id + "&html5=1"
     );
+  }
+
+  toggleShow() {
+    let currentShow = this.showList;
+    let nextShow = !currentShow;
+    if(nextShow){
+      this.video.nativeElement.focus();
+    }
+    this.showList = nextShow;
   }
 }

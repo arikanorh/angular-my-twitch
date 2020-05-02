@@ -30,6 +30,7 @@ export class NavigatablelistDirective
         this.focusCurrentElement();
       }
     } catch (err) {}
+    console.log("ngAfterContentChecked");
   }
 
   ngAfterViewInit(): void {
@@ -75,6 +76,8 @@ export class NavigatablelistDirective
 
   hasCurrentFocus() {
     let elem = this.channels.toArray()[this.focusIndex].nativeElement;
-    return elem === document.activeElement;
+    let hasCurrentFocus = elem === document.activeElement;
+    console.log({hasCurrentFocus})
+    return hasCurrentFocus;
   }
 }
