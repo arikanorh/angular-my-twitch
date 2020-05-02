@@ -9,7 +9,7 @@ import {
   OnDestroy
 } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
-import { TwitchService } from './twitch.service';
+import { TwitchService } from "./twitch.service";
 
 @Directive({
   selector: "[appNavigatablelist]"
@@ -21,7 +21,7 @@ export class NavigatablelistDirective
   listener;
   sub: Subscription;
 
-  constructor(private twitch:TwitchService) { }
+  constructor(private twitch: TwitchService) {}
 
   ngAfterContentChecked() {
     try {
@@ -29,24 +29,26 @@ export class NavigatablelistDirective
         this.focusIndex = 0;
         this.focusCurrentElement();
       }
-    } catch (err) { }
+    } catch (err) {}
   }
 
   ngAfterViewInit(): void {
-
     this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
       if (!this.hasCurrentFocus()) {
         this.focusIndex = 0;
         this.focusCurrentElement();
         return;
       }
-
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArroRight") {
+      
+      }
+     else if (e.key === "ArrowDown") {
         this.focusIndex++;
         this.focusCurrentElement();
-      } else if (e.key === "ArrowLeft") {
-        if(this.focusIndex==0){
-            this.twitch.loadFavs();
+      } 
+      else if (e.key === "ArrowUp") {
+        if (this.focusIndex == 0) {
+          this.twitch.loadFavs();
         }
         this.focusIndex--;
         this.focusCurrentElement();
@@ -63,8 +65,7 @@ export class NavigatablelistDirective
   }
 
   focusCurrentElement() {
-    if (this.focusIndex < 0)
-      this.focusIndex = 0;
+    if (this.focusIndex < 0) this.focusIndex = 0;
     else if (this.focusIndex >= this.channels.length) {
       this.focusIndex = this.channels.length - 1;
     }
@@ -76,5 +77,4 @@ export class NavigatablelistDirective
     let elem = this.channels.toArray()[this.focusIndex].nativeElement;
     return elem === document.activeElement;
   }
-
 }

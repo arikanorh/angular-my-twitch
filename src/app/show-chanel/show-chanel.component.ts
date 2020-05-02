@@ -24,7 +24,7 @@ export class ShowChanelComponent implements OnInit {
   data$;
   url;
   listener;
-  showList: boolean = false;
+  showList: boolean = true;
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
@@ -42,16 +42,18 @@ export class ShowChanelComponent implements OnInit {
         if(!this.showList){
           this.video.nativeElement.webkitRequestFullScreen(); 
         }
-      } else if (e.key === "ArrowDown") {
+      } else if (e.key === "ArrowRight") {
         this.showList = false;
         // this.modal.hide();
-      } else if (e.key === "ArrowRight") {
+      } else if (e.key === "ArrowLeft") {
         //  this.modal.show(); 
         this.showList = true;
       }
       else if (e.key === "ArrowLeft") {
         //  this.modal.show(); 
         this.showList = true;
+      }else if (e.key==="Enter"){
+        this.showList=false;
       }
     });
     this.data$ = this.twitch.getFavStreams();
