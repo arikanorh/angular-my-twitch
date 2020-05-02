@@ -37,24 +37,24 @@ export class NavigatablelistDirective
       if (!this.hasCurrentFocus()) {
         this.focusIndex = 0;
         this.focusCurrentElement();
-        return;
-      }
-      if (e.key === "ArrowRight") {
-      
-      }
-     else if (e.key === "ArrowDown") {
+      } else if (e.key === "ArrowLeft") {
+        this.focusIndex = 0;
+        this.focusCurrentElement();
+      } else if (e.key === "ArrowDown") {
         this.focusIndex++;
         this.focusCurrentElement();
-      } 
-      else if (e.key === "ArrowUp") {
+        e.preventDefault();
+      } else if (e.key === "ArrowUp") {
         if (this.focusIndex == 0) {
           this.twitch.loadFavs();
         }
         this.focusIndex--;
         this.focusCurrentElement();
+        e.preventDefault();
       } else if (e.key === "Enter") {
         this.channels.toArray()[this.focusIndex].nativeElement.click();
       }
+      return false;
     });
   }
   ngOnDestroy() {
@@ -65,9 +65,10 @@ export class NavigatablelistDirective
   }
 
   focusCurrentElement() {
-    if (this.focusIndex < 0) this.focusIndex = 0;
+    if (this.focusIndex < 0) 
+    this.focusIndex = 0;
     else if (this.focusIndex >= this.channels.length) {
-      this.focusIndex = this.channels.length - 1;
+      this.focusIndex = 0;
     }
     let element = this.channels.toArray()[this.focusIndex].nativeElement;
     element.focus();
@@ -76,6 +77,6 @@ export class NavigatablelistDirective
   hasCurrentFocus() {
     let elem = this.channels.toArray()[this.focusIndex].nativeElement;
     let hasCurrentFocus = elem === document.activeElement;
-     return hasCurrentFocus;
+    return hasCurrentFocus;
   }
 }
