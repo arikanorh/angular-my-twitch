@@ -24,7 +24,7 @@ export class ShowChanelComponent implements OnInit {
   data$;
   url;
   listener;
-  showList: boolean = true;
+  showList: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
@@ -37,7 +37,7 @@ export class ShowChanelComponent implements OnInit {
     });
 
     this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
-      console.log(e.key);
+
       if (e.key === "ArrowUp") {
         if(!this.showList){
           this.video.nativeElement.webkitRequestFullScreen(); 
