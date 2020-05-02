@@ -29,7 +29,7 @@ export class ShowChanelComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private twitch: TwitchService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -37,23 +37,23 @@ export class ShowChanelComponent implements OnInit {
     });
 
     this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
-
       if (e.key === "ArrowUp") {
-        if(!this.showList){
-          this.video.nativeElement.webkitRequestFullScreen(); 
+        if (!this.showList) {
+          this.video.nativeElement.webkitRequestFullScreen();
         }
       } else if (e.key === "ArrowRight") {
-        this.showList = false;
+        this.showList = !this.showList;
         // this.modal.hide();
       } else if (e.key === "ArrowLeft") {
-        //  this.modal.show(); 
+        //  this.modal.show();
+        this.showList = !this.showList;
+      } else if (e.key === "ArrowLeft") {
+        //  this.modal.show();
         this.showList = true;
-      }
-      else if (e.key === "ArrowLeft") {
-        //  this.modal.show(); 
-        this.showList = true;
-      }else if (e.key==="Enter"){
-        this.showList=false;
+      } else if (e.key === "Enter") {
+        this.showList = false;
+      } else if (e.key === "ArrowDown") {
+         
       }
     });
     this.data$ = this.twitch.getFavStreams();

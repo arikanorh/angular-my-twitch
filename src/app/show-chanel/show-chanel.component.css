@@ -2,7 +2,7 @@
     position: relative;
     overflow: hidden;
     height: 100%;
-    width: 100%;
+    display: flex;
 }
 .channels{
     position: fixed;
@@ -21,4 +21,6 @@
     transform: translateX(0);
 
 }
- 
+#video{
+  flex:1;
+}

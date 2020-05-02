@@ -39,7 +39,7 @@ export class NavigatablelistDirective
         this.focusCurrentElement();
         return;
       }
-      if (e.key === "ArroRight") {
+      if (e.key === "ArrowRight") {
       
       }
      else if (e.key === "ArrowDown") {
