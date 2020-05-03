@@ -21,7 +21,7 @@ import { ModalComponent } from "./modal/modal.component";
 import { NavigatablelistDirective } from "./navigatablelist.directive";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { LoadingComponent } from "./loading/loading.component";
-import { LoadingService } from "./loading/loader.service";
+import { LoadingService } from "./loading/loading.service";
 import { LoaderInterceptor } from "./htttp.interceptor";
  
  
