@@ -7,7 +7,7 @@
 
 .stream_img {
   display: inline-block;
-  border-radius: 5px;
+  border-radius: 1px;
   cursor: pointer;
   width: 100%;
   max-width: 420px;
@@ -40,7 +40,8 @@
 
 
 :host:focus .stream_img {
-  outline: 2px solid #7550ba;
+       background: #7550ba;
+    color: white;
 }
 
 .content{
