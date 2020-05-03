@@ -40,6 +40,12 @@ p {
   flex: 1;
   overflow: auto;
   margin-top: 50px;
+  position: relative;
+}
+.loader{
+  position: absolute;
+  top:0;
+  width: 100%;
 }
 .nav-left{
   display: flex;

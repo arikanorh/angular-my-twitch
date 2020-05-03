@@ -1,9 +1,11 @@
+
 <ng-container appNavigatablelist>
    <app-new-channel 
-   #nav 
-   *ngFor="let channel of data$ | async" 
-   [channel]="channel" 
-   tabindex="0"></app-new-channel>
+    #nav 
+    *ngFor="let channel of data$ | async" 
+    [channel]="channel" 
+    tabindex="0"
+   ></app-new-channel>
 </ng-container>
  
     

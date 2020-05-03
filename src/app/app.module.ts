@@ -3,7 +3,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 
 import { AppComponent } from "./app.component";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ChannelComponentComponent } from "./channel-component/channel-component.component";
 import { GameComponent } from "./game/game.component";
 import { RouterModule } from "@angular/router";
@@ -19,7 +19,12 @@ import { environment } from "../environments/environment";
 import { LogoComponent } from "./logo/logo.component";
 import { ModalComponent } from "./modal/modal.component";
 import { NavigatablelistDirective } from "./navigatablelist.directive";
-
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { LoadingComponent } from "./loading/loading.component";
+import { LoadingService } from "./loading/loader.service";
+import { LoaderInterceptor } from "./htttp.interceptor";
+ 
+ 
 @NgModule({
   imports: [
     BrowserModule,
@@ -37,6 +42,7 @@ import { NavigatablelistDirective } from "./navigatablelist.directive";
       { useHash: true }
     ),
     MatIconModule,
+    MatProgressBarModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     })
@@ -52,10 +58,15 @@ import { NavigatablelistDirective } from "./navigatablelist.directive";
     NewChannelComponent,
     LogoComponent,
     ModalComponent,
-    NavigatablelistDirective
+    NavigatablelistDirective,
+    LoadingComponent
   ],
   bootstrap: [AppComponent],
-  providers: [TwitchService]
+  providers: [
+    TwitchService, 
+    LoadingService,
+        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
+]
 })
 export class AppModule {
   constructor(twitch: TwitchService) {

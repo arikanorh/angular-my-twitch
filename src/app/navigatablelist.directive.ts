@@ -20,6 +20,7 @@ export class NavigatablelistDirective
   focusIndex = 0;
   listener;
   sub: Subscription;
+  vertical:boolean=false;
 
   constructor(private twitch: TwitchService) {}
 
@@ -30,21 +31,34 @@ export class NavigatablelistDirective
         this.focusCurrentElement();
       }
     } catch (err) {}
-  }
+      this.vertical = this.isVertical(this.channels.toArray());
+   }
 
   ngAfterViewInit(): void {
+
+   
     this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
+   
+      let backwards = "ArrowLeft";
+      let forwards = "ArrowRight";
+      let top="ArrowUp";
+      if(this.vertical){
+        backwards="ArrowUp";
+        forwards="ArrowDown";
+        top="ArrowLeft";
+      }
+ 
       if (!this.hasCurrentFocus()) {
         this.focusIndex = 0;
         this.focusCurrentElement();
-      } else if (e.key === "ArrowLeft") {
+      } else if (e.key === top) {
         this.focusIndex = 0;
         this.focusCurrentElement();
-      } else if (e.key === "ArrowDown") {
+      } else if (e.key === forwards) {
         this.focusIndex++;
         this.focusCurrentElement();
         e.preventDefault();
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === backwards) {
         if (this.focusIndex == 0) {
           this.twitch.loadFavs();
         }
@@ -78,5 +92,17 @@ export class NavigatablelistDirective
     let elem = this.channels.toArray()[this.focusIndex].nativeElement;
     let hasCurrentFocus = elem === document.activeElement;
     return hasCurrentFocus;
+  }
+
+  isVertical(elements:ElementRef[]){
+    let result:boolean=true;
+
+    if(elements.length>1){
+      let firstTop = elements[0].nativeElement.offsetTop;
+      let secondTop = elements[1].nativeElement.offsetTop;
+      return firstTop!==secondTop;
+    }
+
+    return result;
   }
 }

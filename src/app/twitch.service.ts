@@ -4,7 +4,7 @@ import { map, switchMap, tap } from "rxjs/operators";
 import { games } from "./games";
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
+ 
 @Injectable()
 export class TwitchService {
   private user_id = "127194472"; // Gargamelion's channel client_id
@@ -104,8 +104,8 @@ export class TwitchService {
 
   public loadFavs(){
   
-    this.getMyFollowedStreams().subscribe(e=>{
-      this._favs.next(e);
+     this.getMyFollowedStreams().subscribe(e=>{
+       this._favs.next(e);
      })
 
   }
