@@ -1,17 +1,13 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   ViewChild,
   ElementRef,
-  ViewChildren,
-  QueryList
+
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
-import { ModalComponent } from "../modal/modal.component";
 import { TwitchService } from "../twitch.service";
-import { NewChannelComponent } from "../channel-component/new-channel/new-channel.component";
 
 @Component({
   selector: "app-show-chanel",

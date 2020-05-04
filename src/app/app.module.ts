@@ -12,7 +12,6 @@ import { GamesComponent } from "./games/games.component";
 import { ShowChanelComponent } from "./show-chanel/show-chanel.component";
 import { TwitchService } from "./twitch.service";
 import { MychannelsComponent } from "./mychannels/mychannels.component";
-import { NewChannelComponent } from "./channel-component/new-channel/new-channel.component";
 import { MatIconModule } from "@angular/material/icon";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
