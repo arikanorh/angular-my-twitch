@@ -31,6 +31,16 @@ export class ShowChanelComponent implements OnInit {
       this.url = this.getUrl(params.id);
     });
 
+
+    window.addEventListener(
+      "orientationchange",
+      function(e) {
+        // Announce the new orientation number
+         console.dir(window.orientation);
+      },
+      false
+    );
+
     this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.key === "ArrowUp") {
         if (!this.showList) {
