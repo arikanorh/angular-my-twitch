@@ -23,8 +23,9 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { LoadingComponent } from "./loading/loading.component";
 import { LoadingService } from "./loading/loading.service";
 import { LoaderInterceptor } from "./htttp.interceptor";
- 
- 
+import { TestComponent } from "./test/test.component";
+import { OauthComponent } from "./oauth/oauth.component";
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -37,7 +38,9 @@ import { LoaderInterceptor } from "./htttp.interceptor";
         { path: "channels", component: ChannelsComponent },
         { path: "channels/:id", component: ChannelsComponent },
         { path: "show/:id", component: ShowChanelComponent },
-        { path: "mychannels", component: MychannelsComponent }
+        { path: "mychannels", component: MychannelsComponent },
+        { path: "test", component: TestComponent },
+        { path: "access_token", component: OauthComponent }
       ],
       { useHash: true }
     ),
@@ -55,18 +58,19 @@ import { LoaderInterceptor } from "./htttp.interceptor";
     GamesComponent,
     ShowChanelComponent,
     MychannelsComponent,
-    NewChannelComponent,
     LogoComponent,
     ModalComponent,
     NavigatablelistDirective,
-    LoadingComponent
+    LoadingComponent,
+    TestComponent,
+    OauthComponent
   ],
   bootstrap: [AppComponent],
   providers: [
-    TwitchService, 
+    TwitchService,
     LoadingService,
-        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
-]
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
+  ]
 })
 export class AppModule {
   constructor(twitch: TwitchService) {
@@ -74,7 +78,7 @@ export class AppModule {
 
     document.addEventListener("visibilitychange", e => {
       if (document.visibilityState === "visible") {
-        console.log("Refreshing favs if production ",environment.production);
+        console.log("Refreshing favs if production ", environment.production);
         if (environment.production) {
           twitch.loadFavs();
         }

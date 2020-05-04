@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, switchMap, tap } from "rxjs/operators";
 import { games } from "./games";
-import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
- 
+import { BehaviorSubject } from "rxjs";
+import { environment } from "src/environments/environment";
+
 @Injectable()
 export class TwitchService {
   private user_id = "127194472"; // Gargamelion's channel client_id
+  private client_id = "jzkbprff40iqj646a697cyrvl0zt2m6";
   private _favs = new BehaviorSubject(null);
   private favs$ = this._favs.asObservable();
 
@@ -18,7 +19,7 @@ export class TwitchService {
       "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&game=" +
         game +
         "&limit=100"
-    );
+    ).pipe(map(e=>e.streams));
   }
 
   public getGames() {
@@ -43,9 +44,10 @@ export class TwitchService {
 
   getMyFollowedStreams() {
     return this.getMyFollowedChannel().pipe(
-      switchMap(e =>
-        this.getStreamOfUserIds(e.map(i => "user_id=" + i).join("&"))
-      )
+      switchMap(e => {
+ 
+        return this.getStreamOfUserIds(e.join(","));
+      })
     );
   }
 
@@ -53,24 +55,19 @@ export class TwitchService {
     var channels = [];
     return this.httpService
       .get<any>(
-        "https://api.twitch.tv/helix/users/follows?first=100&from_id=" +
-          this.user_id,
-        {
-          headers: {
-            "Client-ID": "1e4gz76ye3w3f71ic955m4seb8jfph"
-          }
-        }
+        "https://api.twitch.tv/kraken/users/gargamelion/follows/channels?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100"
       )
       .pipe(
         map(e => {
-          let data = e.data;
+          let data = e.follows;
           var keys = Object.keys(data);
 
           let result = [];
           for (var i = 0; i < keys.length; i++) {
             let value = data[keys[i]];
-            result.push(value.to_id);
+            result.push(value.channel.name);
           }
+
           return result;
         })
       );
@@ -82,14 +79,11 @@ export class TwitchService {
 
   public getStreamOfUserIds(user_ids) {
     return this.httpService
-      .get<any>("https://api.twitch.tv/helix/streams?" + user_ids, {
-        headers: {
-          "Client-ID": "1e4gz76ye3w3f71ic955m4seb8jfph"
-        }
-      })
+      .get<any>("https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&channel=" + user_ids)
       .pipe(
         map(e => {
-          let data = e.data;
+
+          let data = e.streams;
           var keys = Object.keys(data);
 
           let result = [];
@@ -102,14 +96,14 @@ export class TwitchService {
       );
   }
 
-  public loadFavs(){
-  
-     this.getMyFollowedStreams().subscribe(e=>{
-       this._favs.next(e);
-     })
-
+  public loadFavs() {
+    this.getMyFollowedStreams().subscribe(e => {
+      this._favs.next(e);
+    });
   }
-  public getFavStreams(){
+  public getFavStreams() {
     return this.favs$;
   }
+
+ 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, HostListener } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 
@@ -20,7 +20,7 @@ export class ChannelComponentComponent implements OnInit {
   constructor(private _sanitizer: DomSanitizer,private router:Router) {}
 
   ngOnInit() {
-    console.log(this.value);
+    //console.log(this.value);
     this.channel_name = this.value.channel.name;
     this.channel_id = this.value.channel._id;
     this.channel_image = this.value.preview.medium;
@@ -36,7 +36,7 @@ export class ChannelComponentComponent implements OnInit {
       })`
     );
   }
-
+  @HostListener('click')
   handleClick(){
     // window.location.href="https://m.twitch.tv/" + this.channel_name+"?no-mobile-redirect=true";
   this.router.navigate(['show',this.channel_name]);

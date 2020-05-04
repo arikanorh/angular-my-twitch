@@ -16,4 +16,8 @@ export class MychannelsComponent implements OnInit {
      this.data$=this.twitch.getFavStreams();
   }
 
+  trackByFn(channel){
+     return channel._id;
+  }
+
 }

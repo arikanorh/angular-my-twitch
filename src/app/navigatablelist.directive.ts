@@ -20,7 +20,8 @@ export class NavigatablelistDirective
   focusIndex = 0;
   listener;
   sub: Subscription;
-  vertical:boolean=false;
+  vertical: boolean = false;
+  rowCount = 1;
 
   constructor(private twitch: TwitchService) {}
 
@@ -31,43 +32,58 @@ export class NavigatablelistDirective
         this.focusCurrentElement();
       }
     } catch (err) {}
-      this.vertical = this.isVertical(this.channels.toArray());
-   }
+    this.vertical = this.isVertical(this.channels.toArray());
+    this.rowCount = this.getRowCount(this.channels.toArray());
+  }
 
   ngAfterViewInit(): void {
-
-   
     this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
-   
+      console.log(this.rowCount);
       let backwards = "ArrowLeft";
       let forwards = "ArrowRight";
-      let top="ArrowUp";
-      if(this.vertical){
-        backwards="ArrowUp";
-        forwards="ArrowDown";
-        top="ArrowLeft";
+      let nextRow = "ArrowDown";
+      let previousRow = "ArrowUp";
+      let preventDefault = ["ArrowUp", "ArrowDown"];
+      let refreshKeys=["ArrowLeft","ArrowUp"];
+      if (this.vertical) {
+        backwards = "ArrowUp";
+        forwards = "ArrowDown";
+        previousRow = "ArrowLeft";
+        nextRow = "ignore";
+        preventDefault = [];
+        refreshKeys=["ArrowUp"];
       }
- 
+      if (preventDefault.indexOf(e.key) >= 0) {
+        e.preventDefault();
+      }
+      if(this.focusIndex===0 && refreshKeys.indexOf(e.key)>=0){
+        this.twitch.loadFavs();
+      }
+
       if (!this.hasCurrentFocus()) {
         this.focusIndex = 0;
         this.focusCurrentElement();
-      } else if (e.key === top) {
-        this.focusIndex = 0;
+      } else if (e.key === previousRow) {
+        this.focusIndex -= this.rowCount;
         this.focusCurrentElement();
       } else if (e.key === forwards) {
         this.focusIndex++;
         this.focusCurrentElement();
-        e.preventDefault();
+      } else if (e.key === nextRow) {
+        this.focusIndex += this.rowCount;
+        this.focusCurrentElement();
       } else if (e.key === backwards) {
-        if (this.focusIndex == 0) {
-          this.twitch.loadFavs();
-        }
         this.focusIndex--;
         this.focusCurrentElement();
         e.preventDefault();
       } else if (e.key === "Enter") {
         this.channels.toArray()[this.focusIndex].nativeElement.click();
       }
+
+      if(this.focusIndex===0){
+        document.querySelector('.router').scrollTo(0,0)
+      }
+
       return false;
     });
   }
@@ -79,8 +95,7 @@ export class NavigatablelistDirective
   }
 
   focusCurrentElement() {
-    if (this.focusIndex < 0) 
-    this.focusIndex = 0;
+    if (this.focusIndex < 0) this.focusIndex = 0;
     else if (this.focusIndex >= this.channels.length) {
       this.focusIndex = 0;
     }
@@ -94,15 +109,27 @@ export class NavigatablelistDirective
     return hasCurrentFocus;
   }
 
-  isVertical(elements:ElementRef[]){
-    let result:boolean=true;
+  isVertical(elements: ElementRef[]) {
+    let result: boolean = true;
 
-    if(elements.length>1){
+    if (elements.length > 1) {
       let firstTop = elements[0].nativeElement.offsetTop;
       let secondTop = elements[1].nativeElement.offsetTop;
-      return firstTop!==secondTop;
+      return firstTop !== secondTop;
     }
 
     return result;
+  }
+
+  getRowCount(elements: ElementRef[]) {
+    let currentIndex = 0;
+    let equals = true;
+    while (equals && currentIndex < elements.length - 2) {
+      let firstTop = elements[currentIndex].nativeElement.offsetTop;
+      let secondTop = elements[currentIndex + 1].nativeElement.offsetTop;
+      equals = firstTop === secondTop;
+      currentIndex++;
+    }
+    return currentIndex;
   }
 }

@@ -2,28 +2,33 @@
     max-width: 136px;
     height: 238px;
     float: left;
-    margin: 10px;
+    margin: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
     border-radius: 5px;
-    padding: 5px;
+    padding: 3px;
     border: 2px solid #FFF;
 }
 :host:focus{
   outline: none;
+
 }
-:host:hover .game_item,
 :host:focus .game_item {
 
-    border: 2px solid #7550ba;
+    background: #7550ba;
+    color:white;
     outline:none;
 }
+
 
 
 .game_status {
 
     font-size: 14px;
     color: #6B6B6B;
+}
+:host:focus .game_status{
+  color:white;
 }

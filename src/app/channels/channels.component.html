@@ -1,9 +1,8 @@
 <ng-container appNavigatablelist>
-
-	<app-channel-component 
-  #nav 
-  *ngFor="let channel of channels ;let i = index" [value]="channel" 
-  [attr.tabindex]="i+1">
-
-	</app-channel-component>
+   <app-channel-component 
+    #nav 
+    *ngFor="let channel of channels$ | async ; trackBy:trackByFn" 
+    [value]="channel" 
+    tabindex="0"
+   ></app-channel-component>
 </ng-container>

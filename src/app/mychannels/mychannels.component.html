@@ -1,12 +1,12 @@
     <app-loading class="loading"></app-loading>
 
 <ng-container appNavigatablelist>
-   <app-new-channel 
+   <app-channel-component 
     #nav 
-    *ngFor="let channel of data$ | async" 
-    [channel]="channel" 
+    *ngFor="let channel of data$ | async ; trackBy:trackByFn" 
+    [value]="channel" 
     tabindex="0"
-   ></app-new-channel>
+   ></app-channel-component>
 </ng-container>
  
     
