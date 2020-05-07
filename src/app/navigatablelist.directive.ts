@@ -38,7 +38,7 @@ export class NavigatablelistDirective
 
   ngAfterViewInit(): void {
     this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
-      console.log(this.rowCount);
+
       let backwards = "ArrowLeft";
       let forwards = "ArrowRight";
       let nextRow = "ArrowDown";
