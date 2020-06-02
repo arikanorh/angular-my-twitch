@@ -37,9 +37,18 @@ export class NavigatablelistDirective
   }
 
   ngAfterViewInit(): void {
-    this.listener = document.addEventListener("keydown", (e: KeyboardEvent) => {
+    window.addEventListener("keydown", this.eventListener);
 
-      let backwards = "ArrowLeft";
+  }
+  ngOnDestroy() {
+    window.removeEventListener("keydown", this.eventListener);
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+   }
+
+  eventListener = (e: KeyboardEvent) =>{
+    let backwards = "ArrowLeft";
       let forwards = "ArrowRight";
       let nextRow = "ArrowDown";
       let previousRow = "ArrowUp";
@@ -85,13 +94,6 @@ export class NavigatablelistDirective
       }
 
       return false;
-    });
-  }
-  ngOnDestroy() {
-    document.removeEventListener("keypress", this.listener);
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
   }
 
   focusCurrentElement() {

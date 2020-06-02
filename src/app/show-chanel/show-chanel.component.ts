@@ -18,8 +18,7 @@ export class ShowChanelComponent implements OnInit {
   @ViewChild("wrapper") video: ElementRef;
   data$;
   url;
-  listener;
-  showList: boolean = false;
+   showList: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
@@ -32,7 +31,15 @@ export class ShowChanelComponent implements OnInit {
     });
  
     
-    this.listener = window.addEventListener("keydown", (e: KeyboardEvent) => {
+    window.addEventListener("keydown", this.eventListener);
+    this.data$ = this.twitch.getFavStreams();
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener("keydown", this.eventListener);
+  }
+
+  eventListener = (e: KeyboardEvent) => {
       if (e.key === "ArrowUp") {
         if (!this.showList) {
           this.video.nativeElement.webkitRequestFullScreen();
@@ -46,13 +53,8 @@ export class ShowChanelComponent implements OnInit {
         this.showList = false;
       } else if (e.key === "ArrowDown") {
       }
-    });
-    this.data$ = this.twitch.getFavStreams();
-  }
+    };
 
-  ngOnDestroy() {
-    document.removeEventListener("keypress", this.listener);
-  }
   getUrl(id: string) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       "https://player.twitch.tv/?channel=" + id + "&html5=1"
