@@ -44,6 +44,7 @@
     color: white;
 }
 
+
 .content{
   padding: 5px 5px;
   display: flex;
@@ -54,12 +55,16 @@
   position: absolute;
   top: 0;
   left: 0;
-  color: white;
+  color: black;
+   background-color: white;
   font-weight: bold;
-  background: #7550ba;
-  padding: 0 5px;
+   padding: 0 5px;
   border-radius: 4px;
   margin: 5px;
+}
+:host:focus .title{
+  background-color: #7550ba;
+  color:wh
 }
 
 .mobile{
