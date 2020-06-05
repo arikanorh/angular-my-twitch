@@ -18,15 +18,22 @@ export class TwitchService {
     return this.httpService.get<any>(
       "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&game=" +
         game +
-        "&limit=100"
+        "&limit=100", {
+        headers: {
+            'accept': 'application/vnd.twitchtv.v5+json'
+        }
+        }
     ).pipe(map(e=>e.streams));
   }
 
   public getGames() {
     return this.httpService
       .get<any>(
-        "https://api.twitch.tv/kraken/games/top?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100&offset=0"
-      )
+        "https://api.twitch.tv/kraken/games/top?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100&offset=0", {
+        headers: {
+            'accept': 'application/vnd.twitchtv.v5+json'
+        }
+        })
       .pipe(
         tap(e => {
           let data = e.top;
@@ -55,7 +62,11 @@ export class TwitchService {
     var channels = [];
     return this.httpService
       .get<any>(
-        "https://api.twitch.tv/kraken/users/gargamelion/follows/channels?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100"
+        "https://api.twitch.tv/kraken/users/127194472/follows/channels?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100", {
+        headers: {
+            'accept': 'application/vnd.twitchtv.v5+json'
+        }
+        }
       )
       .pipe(
         map(e => {
@@ -79,7 +90,11 @@ export class TwitchService {
 
   public getStreamOfUserIds(user_ids) {
     return this.httpService
-      .get<any>("https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&channel=" + user_ids)
+      .get<any>("https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&channel=" + user_ids,{
+        headers: {
+            'accept': 'application/vnd.twitchtv.v5+json'
+        }
+        })
       .pipe(
         map(e => {
 
