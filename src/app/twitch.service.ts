@@ -1,114 +1,52 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { map, switchMap, tap } from "rxjs/operators";
-import { games } from "./games";
-import { BehaviorSubject } from "rxjs";
-import { environment } from "src/environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { map, switchMap, tap, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { CookieService } from 'ngx-cookie';
+import { Constants } from './model/Constants';
 
 @Injectable()
 export class TwitchService {
-  private user_id = "127194472"; // Gargamelion's channel client_id
-  private client_id = "jzkbprff40iqj646a697cyrvl0zt2m6";
+  private user_id = '127194472'; // Gargamelion's channel client_id
+  private client_id = '1e4gz76ye3w3f71ic955m4seb8jfph';
   private _favs = new BehaviorSubject(null);
   private favs$ = this._favs.asObservable();
+  private access_token;
+  private TWITCH_HELIX_API_URL = 'https://api.twitch.tv/helix';
 
-  constructor(private httpService: HttpClient) {}
+  constructor(
+    private httpService: HttpClient,
+    private cookieService: CookieService
+  ) {}
 
-  public getChannelsOfGame(game: string) {
-    return this.httpService.get<any>(
-      "https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&game=" +
-        game +
-        "&limit=100", {
+  private makeAPIRequest(url: string) {
+    this.checkAccessToken();
+    return this.httpService
+      .get<any>(url, {
         headers: {
-            'accept': 'application/vnd.twitchtv.v5+json'
+          'Client-Id': this.client_id,
+          Authorization: 'Bearer ' + this.access_token
         }
-        }
-    ).pipe(map(e=>e.streams));
+      })
+      .pipe(this.handle401);
   }
 
   public getGames() {
-    return this.httpService
-      .get<any>(
-        "https://api.twitch.tv/kraken/games/top?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100&offset=0", {
-        headers: {
-            'accept': 'application/vnd.twitchtv.v5+json'
-        }
-        })
-      .pipe(
-        tap(e => {
-          let data = e.top;
-          var keys = Object.keys(data);
-
-          let result = {};
-          for (var i = 0; i < keys.length; i++) {
-            let value = data[keys[i]];
-            result[value.game._id] = value.game.name;
-          }
-          //console.log(JSON.stringify(result));
-        })
-      );
-  }
-
-  getMyFollowedStreams() {
-    return this.getMyFollowedChannel().pipe(
-      switchMap(e => {
- 
-        return this.getStreamOfUserIds(e.join(","));
-      })
+    return this.makeAPIRequest(
+      this.TWITCH_HELIX_API_URL + '/games/top?first=100'
     );
   }
 
-  getMyFollowedChannel() {
-    var channels = [];
-    return this.httpService
-      .get<any>(
-        "https://api.twitch.tv/kraken/users/127194472/follows/channels?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&limit=100", {
-        headers: {
-            'accept': 'application/vnd.twitchtv.v5+json'
-        }
-        }
-      )
-      .pipe(
-        map(e => {
-          let data = e.follows;
-          var keys = Object.keys(data);
-
-          let result = [];
-          for (var i = 0; i < keys.length; i++) {
-            let value = data[keys[i]];
-            result.push(value.channel.name);
-          }
-
-          return result;
-        })
-      );
+  public getChannelsOfGame(id: string) {
+    return this.makeAPIRequest(
+      this.TWITCH_HELIX_API_URL + '/streams?game_id=' + id
+    ).pipe(map((e: any) => e.data));
   }
 
-  getGameName(game_id): string {
-    return games[game_id];
-  }
-
-  public getStreamOfUserIds(user_ids) {
-    return this.httpService
-      .get<any>("https://api.twitch.tv/kraken/streams?client_id=jzkbprff40iqj646a697cyrvl0zt2m6&channel=" + user_ids,{
-        headers: {
-            'accept': 'application/vnd.twitchtv.v5+json'
-        }
-        })
-      .pipe(
-        map(e => {
-
-          let data = e.streams;
-          var keys = Object.keys(data);
-
-          let result = [];
-          for (var i = 0; i < keys.length; i++) {
-            let value = data[keys[i]];
-            result.push(value);
-          }
-          return result;
-        })
-      );
+  public getMyFollowedStreams() {
+    return this.makeAPIRequest(
+      this.TWITCH_HELIX_API_URL + '/streams/followed?user_id=' + this.user_id
+    ).pipe(map((e: any) => e.data));
   }
 
   public loadFavs() {
@@ -120,5 +58,44 @@ export class TwitchService {
     return this.favs$;
   }
 
- 
+  public getOauthUrl() {
+    let href: string;
+    href = 'https://id.twitch.tv/oauth2/authorize?';
+    href += 'client_id=1e4gz76ye3w3f71ic955m4seb8jfph';
+    href += '&';
+    href += 'redirect_uri=' + encodeURIComponent(this.getBaseUrl());
+    href += '&';
+    href += 'response_type=token';
+    href += '&';
+    href += 'scope=user:read:follows';
+    return href;
+  }
+
+  getBaseUrl() {
+    return window.location.origin + '/#/oauth_redirect';
+  }
+
+  public redirectToOauth() {
+    window.location.replace(this.getOauthUrl());
+  }
+
+  private checkAccessToken() {
+    const access_token = this.cookieService.get(Constants.ACCESS_TOKEN);
+    if (access_token) {
+      this.access_token = access_token;
+    } else {
+      console.error('Access token does not exists');
+      this.redirectToOauth();
+    }
+  }
+
+  private handle401 = catchError((err: HttpErrorResponse) => {
+    if (err.status == 401) {
+      console.warn('Got 401. Redirecting to Oauth');
+      this.redirectToOauth();
+    } else {
+      console.error('ERR :', err);
+    }
+    return throwError(err); //Rethrow it back to component
+  });
 }

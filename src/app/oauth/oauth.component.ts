@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie';
+import { Constants } from '../model/Constants';
 
 @Component({
   selector: 'app-oauth',
@@ -7,10 +9,17 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./oauth.component.css']
 })
 export class OauthComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    route: ActivatedRoute,
+    cookieService: CookieService,
+    rotuer: Router
+  ) {
     console.log('Oauth page 2');
-    const x = this.route.snapshot.fragment;
-    console.log(x);
+    const x = route.snapshot.fragment;
+    const access_token = new URLSearchParams(x).get('access_token');
+
+    cookieService.put(Constants.ACCESS_TOKEN, access_token);
+    rotuer.navigate(['/games']);
   }
 
   ngOnInit() {}

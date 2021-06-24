@@ -8,8 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class TestComponent implements OnInit {
   href;
 
-  constructor() {
-   }
+  constructor() {}
 
   ngOnInit() {
     this.href = 'https://id.twitch.tv/oauth2/authorize?';
@@ -18,6 +17,8 @@ export class TestComponent implements OnInit {
     this.href += 'redirect_uri=' + encodeURIComponent(this.getBaseUrl());
     this.href += '&';
     this.href += 'response_type=token';
+    this.href += '&';
+    this.href += 'scope=user:read:follows';
   }
 
   getBaseUrl() {

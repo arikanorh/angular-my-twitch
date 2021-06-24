@@ -1,34 +1,39 @@
 .game_item {
-    max-width: 136px;
-    height: 238px;
-    float: left;
-    margin: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    border-radius: 5px;
-    padding: 3px;
-    border: 2px solid #FFF;
+  height: 238px;
+  float: left;
+  margin: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 3px;
+  border: 2px solid #fff;
+  text-align: center;
+  position: relative;
+  min-width: 150px;
+  min-height: 250px;
 }
-:host:focus{
+:host:focus {
   outline: none;
-
 }
 :host:focus .game_item {
-
-    background: #7550ba;
-    color:white;
-    outline:none;
+  background: #7550ba;
+  color: white;
+  outline: none;
 }
-
-
 
 .game_status {
-
-    font-size: 14px;
-    color: #6B6B6B;
+  font-size: 14px;
+  color: #6b6b6b;
 }
-:host:focus .game_status{
-  color:white;
+:host:focus .game_status {
+  color: white;
+}
+.game_name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

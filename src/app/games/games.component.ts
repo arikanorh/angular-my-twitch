@@ -17,7 +17,7 @@ export class GamesComponent implements OnInit {
   ngOnInit(){
     this.twitch.getGames().subscribe(
       e=>{
-        this.games = e.top; 
+        this.games = e.data; 
       }
     );
 

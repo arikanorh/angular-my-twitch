@@ -10,17 +10,17 @@ import { TwitchService } from "../twitch.service";
 })
 export class ChannelsComponent implements OnInit {
   channels$;
-  name;
+  id;
   constructor(
     private httpService: HttpClient,
     route: ActivatedRoute,
     private twitch: TwitchService
   ) {
-    this.name = route.snapshot.params.id;
+    this.id = route.snapshot.params.id;
   }
 
   ngOnInit() {
-    this.channels$ = this.twitch.getChannelsOfGame(this.name);
+    this.channels$ = this.twitch.getChannelsOfGame(this.id);
   }
   
   trackByFn(channel) {

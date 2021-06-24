@@ -24,10 +24,12 @@ import { LoadingService } from './loading/loading.service';
 import { LoaderInterceptor } from './htttp.interceptor';
 import { TestComponent } from './test/test.component';
 import { OauthComponent } from './oauth/oauth.component';
+import { CookieModule } from 'ngx-cookie';
 
 @NgModule({
   imports: [
     BrowserModule,
+    CookieModule.forRoot(),
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(

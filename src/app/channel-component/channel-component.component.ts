@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, HostListener } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
-import { Router } from "@angular/router";
+import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-channel-component",
-  templateUrl: "./channel-component.component.html",
-  styleUrls: ["./channel-component.component.css"]
+  selector: 'app-channel-component',
+  templateUrl: './channel-component.component.html',
+  styleUrls: ['./channel-component.component.css']
 })
 export class ChannelComponentComponent implements OnInit {
   @Input() value;
@@ -17,17 +17,19 @@ export class ChannelComponentComponent implements OnInit {
   viewers;
   game_name;
 
-  constructor(private _sanitizer: DomSanitizer,private router:Router) {}
+  constructor(private _sanitizer: DomSanitizer, private router: Router) {}
 
   ngOnInit() {
     //console.log(this.value);
-    this.channel_name = this.value.channel.name;
-    this.channel_id = this.value.channel._id;
-    this.channel_image = this.value.preview.medium;
-    this.channgel_display_name = this.value.channel.display_name;
-    this.channel_status = this.value.channel.status;
-    this.viewers = this.value.viewers;
-    this.game_name = this.value.game;
+    this.channel_name = this.value.user_name; //user_name
+    this.channel_id = this.value.user_login; //user_login
+    this.channel_image = this.value.thumbnail_url
+      .replace('{width}', '320')
+      .replace('{height}', '180'); // thumbnail_url - replace height-width
+    this.channgel_display_name = this.value.user_name; // user_name
+    this.channel_status = this.value.title; // title
+    this.viewers = this.value.viewer_count; // viewer_count
+    this.game_name = this.value.game_name; // game_name
   }
   getBackground() {
     return this._sanitizer.bypassSecurityTrustStyle(
@@ -37,12 +39,11 @@ export class ChannelComponentComponent implements OnInit {
     );
   }
   @HostListener('click')
-  handleClick(){
-    // window.location.href="https://m.twitch.tv/" + this.channel_name+"?no-mobile-redirect=true";
-  this.router.navigate(['show',this.channel_name]);
+  handleClick() {
+    this.router.navigate(['show', this.channel_name]); //user_login
   }
-  goMobile(){
-         window.location.href="https://m.twitch.tv/" + this.channel_name+"?no-mobile-redirect=true";
-
+  goMobile() {
+    window.location.href =
+      'https://m.twitch.tv/' + this.channel_name + '?no-mobile-redirect=true';
   }
 }
