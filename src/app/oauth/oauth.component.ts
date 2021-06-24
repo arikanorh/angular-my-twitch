@@ -7,16 +7,11 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./oauth.component.css']
 })
 export class OauthComponent implements OnInit {
-
-  fragment;
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    this.fragment = this.route.url;
-
-    this.route.fragment.subscribe(
-      (fragments) => console.log(fragments)
-    ); 
+  constructor(private route: ActivatedRoute) {
+    console.log('Oauth page 2');
+    const x = this.route.snapshot.fragment;
+    console.log(x);
   }
 
+  ngOnInit() {}
 }
