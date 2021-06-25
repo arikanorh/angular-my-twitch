@@ -3,7 +3,7 @@
 <ng-container appNavigatablelist>
    <app-channel-component 
     #nav 
-    *ngFor="let channel of data$ | async" 
+    *ngFor="let channel of data$ | async ; trackBy:trackByFn" 
     [value]="channel" 
     tabindex="0"
    ></app-channel-component>

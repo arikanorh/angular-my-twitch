@@ -88,6 +88,12 @@ export class TwitchService {
       this.redirectToOauth();
     }
   }
+  public hasAccessToken():boolean{
+    return this.cookieService.get(Constants.ACCESS_TOKEN)?true:false;
+  }
+  public setAccessToken(access_token:string){
+    this.cookieService.put(Constants.ACCESS_TOKEN, access_token);
+  }
 
   private handle401 = catchError((err: HttpErrorResponse) => {
     if (err.status == 401) {
@@ -98,4 +104,6 @@ export class TwitchService {
     }
     return throwError(err); //Rethrow it back to component
   });
+
+ 
 }

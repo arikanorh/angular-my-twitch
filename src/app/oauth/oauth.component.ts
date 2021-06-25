@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 import { Constants } from '../model/Constants';
+import { TwitchService } from '../twitch.service';
 
 @Component({
   selector: 'app-oauth',
@@ -9,16 +10,11 @@ import { Constants } from '../model/Constants';
   styleUrls: ['./oauth.component.css']
 })
 export class OauthComponent implements OnInit {
-  constructor(
-    route: ActivatedRoute,
-    cookieService: CookieService,
-    rotuer: Router
-  ) {
-    console.log('Oauth page 2');
+  constructor(route: ActivatedRoute, rotuer: Router, twitch: TwitchService) {
     const x = route.snapshot.fragment;
     const access_token = new URLSearchParams(x).get('access_token');
 
-    cookieService.put(Constants.ACCESS_TOKEN, access_token);
+    twitch.setAccessToken(access_token);
     rotuer.navigate(['/games']);
   }
 

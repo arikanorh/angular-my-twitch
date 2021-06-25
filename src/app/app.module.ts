@@ -75,12 +75,14 @@ import { CookieModule } from 'ngx-cookie';
 })
 export class AppModule {
   constructor(twitch: TwitchService) {
-    twitch.loadFavs();
+    if (twitch.hasAccessToken()) {
+      twitch.loadFavs();
+    }
 
     document.addEventListener('visibilitychange', e => {
       if (document.visibilityState === 'visible') {
-        console.log('Refreshing favs if production ', environment.production);
         if (environment.production) {
+          console.log('Refreshing favs if production ', environment.production);
           twitch.loadFavs();
         }
       }

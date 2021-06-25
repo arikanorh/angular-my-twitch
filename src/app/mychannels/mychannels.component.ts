@@ -7,14 +7,16 @@ import { TwitchService } from '../twitch.service';
   styleUrls: ['./mychannels.component.css']
 })
 export class MychannelsComponent implements OnInit {
-
   data$;
 
-  constructor(private twitch:TwitchService) { }
+  constructor(private twitch: TwitchService) {}
 
   ngOnInit() {
-     this.data$=this.twitch.getFavStreams();
+    this.data$ = this.twitch.getFavStreams();
+    this.twitch.loadFavs();
   }
 
-
+  trackByFn(channel) {
+    return channel.id;
+  }
 }

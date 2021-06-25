@@ -1,12 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute } from "@angular/router";
-import { TwitchService } from "../twitch.service";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { TwitchService } from '../twitch.service';
 
 @Component({
-  selector: "app-channels",
-  templateUrl: "./channels.component.html",
-  styleUrls: ["./channels.component.css"]
+  selector: 'app-channels',
+  templateUrl: './channels.component.html',
+  styleUrls: ['./channels.component.css']
 })
 export class ChannelsComponent implements OnInit {
   channels$;
@@ -22,8 +22,8 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.channels$ = this.twitch.getChannelsOfGame(this.id);
   }
-  
+
   trackByFn(channel) {
-    return channel._id;
+    return channel.id;
   }
 }
