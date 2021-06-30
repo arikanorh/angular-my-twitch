@@ -8,17 +8,13 @@ import { Stream } from '../model/Stream';
   styleUrls: ['./channel-component.component.css']
 })
 export class ChannelComponentComponent implements OnInit {
-  @Input() value:Stream;
+  @Input() value: Stream;
 
   channel_image;
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    this.channel_image = this.value.thumbnail_url
-      .replace('{width}', '320')
-      .replace('{height}', '180'); // thumbnail_url - replace height-width
-  }
+  ngOnInit() {}
 
   @HostListener('click')
   handleClick() {

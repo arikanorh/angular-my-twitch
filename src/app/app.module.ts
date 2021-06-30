@@ -25,6 +25,7 @@ import { LoaderInterceptor } from './htttp.interceptor';
 import { TestComponent } from './test/test.component';
 import { OauthComponent } from './oauth/oauth.component';
 import { CookieModule } from 'ngx-cookie';
+import { ResizePipe } from './pipe/resize.pipe';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { CookieModule } from 'ngx-cookie';
     NavigatablelistDirective,
     LoadingComponent,
     TestComponent,
-    OauthComponent
+    OauthComponent,
+    ResizePipe
   ],
   bootstrap: [AppComponent],
   providers: [

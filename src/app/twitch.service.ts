@@ -42,8 +42,6 @@ export class TwitchService {
         })
       )
       .pipe(map((e: any) => e.data));
-    /*       );
-     */
   }
 
   public getGames(): Observable<Game[]> {
@@ -64,7 +62,7 @@ export class TwitchService {
     );
   }
 
-  public loadFavs() {
+  public loadFavs(): void {
     this.getMyFollowedStreams().subscribe((e: Stream[]) => {
       this._favs.next(e);
     });
@@ -73,7 +71,7 @@ export class TwitchService {
     return this.favs$;
   }
 
-  public getOauthUrl() {
+  public getOauthUrl(): string {
     let href: string;
     href = 'https://id.twitch.tv/oauth2/authorize?';
     href += 'client_id=1e4gz76ye3w3f71ic955m4seb8jfph';
@@ -86,15 +84,15 @@ export class TwitchService {
     return href;
   }
 
-  private getBaseUrl() {
+  private getBaseUrl(): string {
     return window.location.origin + '/#/oauth_redirect';
   }
 
-  public redirectToOauth() {
+  public redirectToOauth(): void {
     window.location.replace(this.getOauthUrl());
   }
 
-  private checkAccessToken() {
+  private checkAccessToken(): void {
     const access_token = this.cookieService.get(Constants.ACCESS_TOKEN);
     if (access_token) {
       this.access_token = access_token;
