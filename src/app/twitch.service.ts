@@ -11,9 +11,9 @@ import { Game } from './model/Game';
 export class TwitchService {
   private user_id = '127194472'; // Gargamelion's channel client_id
   private client_id = '1e4gz76ye3w3f71ic955m4seb8jfph';
-  private _favs = new BehaviorSubject(null);
+  private _favs = new BehaviorSubject<Stream[]>(null);
   private favs$ = this._favs.asObservable();
-  private access_token;
+  private access_token: string;
   private TWITCH_HELIX_API_URL = 'https://api.twitch.tv/helix';
 
   constructor(
@@ -30,7 +30,10 @@ export class TwitchService {
           Authorization: 'Bearer ' + this.access_token
         }
       })
+      .pipe(map((e: any) => e.data))
       .pipe(this.handle401);
+    /*       );
+     */
   }
 
   public getGames(): Observable<Game[]> {
@@ -42,21 +45,21 @@ export class TwitchService {
   public getStreamsOfGame(id: string): Observable<Stream[]> {
     return this.makeAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams?game_id=' + id
-    ).pipe(map((e: any) => e.data));
+    );
   }
 
   public getMyFollowedStreams(): Observable<Stream[]> {
     return this.makeAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams/followed?user_id=' + this.user_id
-    ).pipe(map((e: any) => e.data));
+    );
   }
 
   public loadFavs() {
-    this.getMyFollowedStreams().subscribe((e: Stream) => {
+    this.getMyFollowedStreams().subscribe((e: Stream[]) => {
       this._favs.next(e);
     });
   }
-  public getFavStreams() {
+  public getFavStreams(): Observable<Stream[]> {
     return this.favs$;
   }
 
@@ -73,7 +76,7 @@ export class TwitchService {
     return href;
   }
 
-  getBaseUrl() {
+  private getBaseUrl() {
     return window.location.origin + '/#/oauth_redirect';
   }
 
@@ -97,13 +100,15 @@ export class TwitchService {
     this.cookieService.put(Constants.ACCESS_TOKEN, access_token);
   }
 
-  private handle401 = catchError((err: HttpErrorResponse) => {
-    if (err.status == 401) {
-      console.warn('Got 401. Redirecting to Oauth');
-      this.redirectToOauth();
-    } else {
-      console.error('ERR :', err);
+  private handle401 = catchError(
+    (err: HttpErrorResponse): Observable<any> => {
+      if (err.status == 401) {
+        console.warn('Got 401. Redirecting to Oauth');
+        this.redirectToOauth();
+      } else {
+        console.error('ERR :', err);
+      }
+      return throwError(err); //Rethrow it back to component
     }
-    return throwError(err); //Rethrow it back to component
-  });
+  );
 }

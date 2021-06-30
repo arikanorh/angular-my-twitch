@@ -9,11 +9,8 @@ import { TwitchService } from '../twitch.service';
 export class TestComponent {
   href;
 
-  constructor(private twitch: TwitchService) {
+  constructor(twitch: TwitchService) {
     this.href = twitch.getOauthUrl();
   }
 
-  getBaseUrl() {
-    return window.location.origin + '/#/oauth_redirect';
-  }
 }
