@@ -79,6 +79,7 @@ export class AppModule {
   constructor(twitch: TwitchService) {
     if (twitch.hasAccessToken()) {
       twitch.loadFavs();
+      twitch.l();
     }
 
     document.addEventListener('visibilitychange', e => {

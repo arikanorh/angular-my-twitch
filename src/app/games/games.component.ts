@@ -17,6 +17,10 @@ export class GamesComponent implements OnInit {
 
   ngOnInit(){
     this.games$ = this.twitch.getGamesFromAPI();
+    this.reloadGames();
+    }
 
-  }
+    reloadGames(){
+      this.twitch.loadGames();
+    }
 }
