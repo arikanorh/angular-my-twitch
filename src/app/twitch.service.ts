@@ -21,7 +21,7 @@ export class TwitchService {
     private cookieService: CookieService
   ) {}
 
-  private makeAPIRequest<T>(url: string): Observable<T[]> {
+  private makeTwitchAPIRequest<T>(url: string): Observable<T[]> {
     this.checkAccessToken();
     return this.httpService
       .get<T>(url, {
@@ -30,26 +30,36 @@ export class TwitchService {
           Authorization: 'Bearer ' + this.access_token
         }
       })
-      .pipe(map((e: any) => e.data))
-      .pipe(this.handle401);
+      .pipe(
+        catchError((err: HttpErrorResponse) => {
+          if (err.status == 401) {
+            console.warn('Got 401. Redirecting to Oauth');
+            this.redirectToOauth();
+          } else {
+            console.error('ERR :', err);
+          }
+          return throwError(err); //Rethrow it back to component
+        })
+      )
+      .pipe(map((e: any) => e.data));
     /*       );
      */
   }
 
   public getGames(): Observable<Game[]> {
-    return this.makeAPIRequest<Game>(
+    return this.makeTwitchAPIRequest<Game>(
       this.TWITCH_HELIX_API_URL + '/games/top?first=100'
     );
   }
 
   public getStreamsOfGame(id: string): Observable<Stream[]> {
-    return this.makeAPIRequest<Stream>(
+    return this.makeTwitchAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams?game_id=' + id
     );
   }
 
   public getMyFollowedStreams(): Observable<Stream[]> {
-    return this.makeAPIRequest<Stream>(
+    return this.makeTwitchAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams/followed?user_id=' + this.user_id
     );
   }
@@ -99,16 +109,4 @@ export class TwitchService {
   public setAccessToken(access_token: string) {
     this.cookieService.put(Constants.ACCESS_TOKEN, access_token);
   }
-
-  private handle401 = catchError(
-    (err: HttpErrorResponse): Observable<any> => {
-      if (err.status == 401) {
-        console.warn('Got 401. Redirecting to Oauth');
-        this.redirectToOauth();
-      } else {
-        console.error('ERR :', err);
-      }
-      return throwError(err); //Rethrow it back to component
-    }
-  );
 }
