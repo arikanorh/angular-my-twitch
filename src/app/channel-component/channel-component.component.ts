@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { Stream } from '../model/Stream';
 
 @Component({
   selector: 'app-channel-component',
@@ -7,14 +8,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./channel-component.component.css']
 })
 export class ChannelComponentComponent implements OnInit {
-  @Input() value;
-  channel_name;
-  channel_id;
+  @Input() value:Stream;
+
   channel_image;
-  channgel_display_name;
-  channel_status;
-  viewers;
-  game_name;
 
   constructor(private router: Router) {}
 
@@ -24,14 +20,13 @@ export class ChannelComponentComponent implements OnInit {
       .replace('{height}', '180'); // thumbnail_url - replace height-width
   }
 
-
-
   @HostListener('click')
   handleClick() {
     this.router.navigate(['show', this.value.user_login]); //user_login
   }
+  //TODO move this to TwitchService
   goMobile() {
-    window.location.href = 
+    window.location.href =
       'https://m.twitch.tv/' +
       this.value.user_login +
       '?no-mobile-redirect=true';

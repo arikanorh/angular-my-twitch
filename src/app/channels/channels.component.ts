@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { TwitchService } from '../twitch.service';
+import { Observable } from 'rxjs/dist/types';
+import { Stream } from '../model/Stream';
 
 @Component({
   selector: 'app-channels',
@@ -9,7 +11,7 @@ import { TwitchService } from '../twitch.service';
   styleUrls: ['./channels.component.css']
 })
 export class ChannelsComponent implements OnInit {
-  channels$;
+  channels$:Observable<Stream[]>;
   id;
   constructor(
     private httpService: HttpClient,

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, switchMap, tap, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie';
 import { Constants } from './model/Constants';
+import { Stream } from './model/Stream';
+import { Game } from './model/Game';
 
 @Injectable()
 export class TwitchService {
@@ -19,10 +21,10 @@ export class TwitchService {
     private cookieService: CookieService
   ) {}
 
-  private makeAPIRequest(url: string) {
+  private makeAPIRequest<T>(url: string): Observable<T[]> {
     this.checkAccessToken();
     return this.httpService
-      .get<any>(url, {
+      .get<T>(url, {
         headers: {
           'Client-Id': this.client_id,
           Authorization: 'Bearer ' + this.access_token
@@ -31,26 +33,26 @@ export class TwitchService {
       .pipe(this.handle401);
   }
 
-  public getGames() {
-    return this.makeAPIRequest(
+  public getGames(): Observable<Game[]> {
+    return this.makeAPIRequest<Game>(
       this.TWITCH_HELIX_API_URL + '/games/top?first=100'
     );
   }
 
-  public getChannelsOfGame(id: string) {
-    return this.makeAPIRequest(
+  public getStreamsOfGame(id: string): Observable<Stream[]> {
+    return this.makeAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams?game_id=' + id
     ).pipe(map((e: any) => e.data));
   }
 
-  public getMyFollowedStreams() {
-    return this.makeAPIRequest(
+  public getMyFollowedStreams(): Observable<Stream[]> {
+    return this.makeAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams/followed?user_id=' + this.user_id
     ).pipe(map((e: any) => e.data));
   }
 
   public loadFavs() {
-    this.getMyFollowedStreams().subscribe(e => {
+    this.getMyFollowedStreams().subscribe((e: Stream) => {
       this._favs.next(e);
     });
   }
@@ -88,10 +90,10 @@ export class TwitchService {
       this.redirectToOauth();
     }
   }
-  public hasAccessToken():boolean{
-    return this.cookieService.get(Constants.ACCESS_TOKEN)?true:false;
+  public hasAccessToken(): boolean {
+    return this.cookieService.get(Constants.ACCESS_TOKEN) ? true : false;
   }
-  public setAccessToken(access_token:string){
+  public setAccessToken(access_token: string) {
     this.cookieService.put(Constants.ACCESS_TOKEN, access_token);
   }
 
@@ -104,6 +106,4 @@ export class TwitchService {
     }
     return throwError(err); //Rethrow it back to component
   });
-
- 
 }
