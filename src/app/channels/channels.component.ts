@@ -23,4 +23,8 @@ export class ChannelsComponent implements OnInit {
   trackByFn(channel) {
     return channel.id;
   }
+
+  reloadFavs() {
+    this.twitch.loadFavs();
+  }
 }

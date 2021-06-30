@@ -3,20 +3,22 @@ import {
   ElementRef,
   ContentChildren,
   AfterViewInit,
-  OnInit,
   QueryList,
   AfterContentChecked,
-  OnDestroy
-} from "@angular/core";
-import { Observable, Subscription } from "rxjs";
-import { TwitchService } from "./twitch.service";
+  OnDestroy,
+  Output,
+  EventEmitter
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { TwitchService } from './twitch.service';
 
 @Directive({
-  selector: "[appNavigatablelist]"
+  selector: '[appNavigatablelist]'
 })
 export class NavigatablelistDirective
   implements AfterViewInit, AfterContentChecked, OnDestroy {
-  @ContentChildren("nav", { read: ElementRef }) channels: QueryList<ElementRef>;
+  @ContentChildren('nav', { read: ElementRef }) channels: QueryList<ElementRef>;
+  @Output() onload = new EventEmitter<void>();
   focusIndex = 0;
   listener;
   sub: Subscription;
@@ -37,64 +39,63 @@ export class NavigatablelistDirective
   }
 
   ngAfterViewInit(): void {
-    window.addEventListener("keydown", this.eventListener);
-
+    window.addEventListener('keydown', this.eventListener);
   }
   ngOnDestroy() {
-    window.removeEventListener("keydown", this.eventListener);
+    window.removeEventListener('keydown', this.eventListener);
     if (this.sub) {
       this.sub.unsubscribe();
     }
-   }
-
-  eventListener = (e: KeyboardEvent) =>{
-    let backwards = "ArrowLeft";
-      let forwards = "ArrowRight";
-      let nextRow = "ArrowDown";
-      let previousRow = "ArrowUp";
-      let preventDefault = ["ArrowUp", "ArrowDown"];
-      let refreshKeys=["ArrowLeft","ArrowUp"];
-      if (this.vertical) {
-        backwards = "ArrowUp";
-        forwards = "ArrowDown";
-        previousRow = "ArrowLeft";
-        nextRow = "ignore";
-        preventDefault = [];
-        refreshKeys=["ArrowUp"];
-      }
-      if (preventDefault.indexOf(e.key) >= 0) {
-        e.preventDefault();
-      }
-      if(this.focusIndex===0 && refreshKeys.indexOf(e.key)>=0){
-        this.twitch.loadFavs();
-      }
-
-      if (!this.hasCurrentFocus()) {
-        this.focusIndex = 0;
-        this.focusCurrentElement();
-      } else if (e.key === previousRow) {
-        this.focusIndex -= this.rowCount;
-        this.focusCurrentElement();
-      } else if (e.key === forwards) {
-        this.focusIndex++;
-        this.focusCurrentElement();
-      } else if (e.key === nextRow) {
-        this.focusIndex += this.rowCount;
-        this.focusCurrentElement();
-      } else if (e.key === backwards) {
-        this.focusIndex--;
-        this.focusCurrentElement();
-        e.preventDefault();
-      } else if (e.key === "Enter") {
-        this.channels.toArray()[this.focusIndex].nativeElement.click();
-      }
-
-      if(this.focusIndex===0){
-        document.querySelector('.router').scrollTo(0,0)
-      }
-
-      return false;
   }
+
+  eventListener = (e: KeyboardEvent) => {
+    let backwards = 'ArrowLeft';
+    let forwards = 'ArrowRight';
+    let nextRow = 'ArrowDown';
+    let previousRow = 'ArrowUp';
+    let preventDefault = ['ArrowUp', 'ArrowDown'];
+    let refreshKeys = ['ArrowLeft', 'ArrowUp'];
+    if (this.vertical) {
+      backwards = 'ArrowUp';
+      forwards = 'ArrowDown';
+      previousRow = 'ArrowLeft';
+      nextRow = 'ignore';
+      preventDefault = [];
+      refreshKeys = ['ArrowUp'];
+    }
+    if (preventDefault.indexOf(e.key) >= 0) {
+      e.preventDefault();
+    }
+    if (this.focusIndex === 0 && refreshKeys.indexOf(e.key) >= 0) {
+      this.onload.emit();
+    }
+
+    if (!this.hasCurrentFocus()) {
+      this.focusIndex = 0;
+      this.focusCurrentElement();
+    } else if (e.key === previousRow) {
+      this.focusIndex -= this.rowCount;
+      this.focusCurrentElement();
+    } else if (e.key === forwards) {
+      this.focusIndex++;
+      this.focusCurrentElement();
+    } else if (e.key === nextRow) {
+      this.focusIndex += this.rowCount;
+      this.focusCurrentElement();
+    } else if (e.key === backwards) {
+      this.focusIndex--;
+      this.focusCurrentElement();
+      e.preventDefault();
+    } else if (e.key === 'Enter') {
+      this.channels.toArray()[this.focusIndex].nativeElement.click();
+    }
+
+    if (this.focusIndex === 0) {
+      document.querySelector('.router').scrollTo(0, 0);
+    }
+
+    return false;
+  };
 
   focusCurrentElement() {
     if (this.focusIndex < 0) this.focusIndex = 0;
