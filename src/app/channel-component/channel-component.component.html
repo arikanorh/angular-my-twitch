@@ -3,17 +3,17 @@
 
 		<img [src]="channel_image" class="img" draggable="false" loading="lazy">
 		<div class="title">
-			{{channgel_display_name}}
+			{{value.user_name}}
 		</div>
 		<div class="mobile" (click)="goMobile()">
 			M
 		</div>
-    <div class="viewer-count">{{viewers}} viewers</div>
+    <div class="viewer-count">{{value.viewer_count}} viewers</div>
 	</div>
 	<div class="content">
 
-		<div class="game-name">{{game_name || 'N/A'}}</div>
-		<div class='channel-status'>{{ channel_status }}</div>
+		<div class="game-name">{{value.game_name}}</div>
+		<div class='channel-status'>{{ value.title }}</div>
 	</div>
 
 </div>
