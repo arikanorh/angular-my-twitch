@@ -11,10 +11,17 @@ import { Game } from './model/Game';
 export class TwitchService {
   private user_id = '127194472'; // Gargamelion's channel client_id
   private client_id = '1e4gz76ye3w3f71ic955m4seb8jfph';
-  private _favs = new BehaviorSubject<Stream[]>(null);
-  private favs$ = this._favs.asObservable();
+
   private access_token: string;
   private TWITCH_HELIX_API_URL = 'https://api.twitch.tv/helix';
+
+
+  private _favs = new BehaviorSubject<Stream[]>(null);
+  private favs$ = this._favs.asObservable();
+
+
+  private _games = new BehaviorSubject<Game[]>(null);
+  private games$ = this._games.asObservable();
 
   constructor(
     private httpService: HttpClient,
@@ -44,32 +51,44 @@ export class TwitchService {
       .pipe(map((e: any) => e.data));
   }
 
-  public getGames(): Observable<Game[]> {
+  public getGamesFromAPI(): Observable<Game[]> {
     return this.makeTwitchAPIRequest<Game>(
       this.TWITCH_HELIX_API_URL + '/games/top?first=100'
     );
   }
 
-  public getStreamsOfGame(id: string): Observable<Stream[]> {
+  public getStreamsOfGameFromAPI(id: string): Observable<Stream[]> {
     return this.makeTwitchAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams?game_id=' + id
     );
   }
 
-  public getMyFollowedStreams(): Observable<Stream[]> {
+  public getMyFollowedStreamsFromAPI(): Observable<Stream[]> {
     return this.makeTwitchAPIRequest<Stream>(
       this.TWITCH_HELIX_API_URL + '/streams/followed?user_id=' + this.user_id
     );
   }
 
   public loadFavs(): void {
-    this.getMyFollowedStreams().subscribe((e: Stream[]) => {
+    this.getMyFollowedStreamsFromAPI().subscribe((e: Stream[]) => {
       this._favs.next(e);
     });
   }
+
+  public loadGames(): void {
+    this.getGamesFromAPI().subscribe((e: Game[]) => {
+      this._games.next(e);
+    });
+  }
+
   public getFavStreams(): Observable<Stream[]> {
     return this.favs$;
   }
+
+  public getGames(): Observable<Game[]> {
+    return this.games$;
+  }
+
 
   public getOauthUrl(): string {
     let href: string;

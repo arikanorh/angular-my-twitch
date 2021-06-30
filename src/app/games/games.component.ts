@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { TwitchService } from '../twitch.service';
 import { Game } from '../model/Game';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-games',
@@ -9,18 +9,14 @@ import { Game } from '../model/Game';
   styleUrls: ['./games.component.css']
 })
 export class GamesComponent implements OnInit {
-  games:Game[];
+  games$:Observable<Game[]>;
  
   constructor(private twitch:TwitchService){
  
   }
 
   ngOnInit(){
-    this.twitch.getGames().subscribe(
-      e=>{
-        this.games = e; 
-      }
-    );
+    this.games$ = this.twitch.getGamesFromAPI();
 
   }
 }
