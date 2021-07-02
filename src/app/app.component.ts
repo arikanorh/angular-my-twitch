@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { TwitchService } from './twitch.service';
+import {  Observable } from 'rxjs';
+import { User } from './model/User';
 
 @Component({
   selector: 'my-app',
@@ -8,5 +10,16 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent   {
 
-   
+
+  user:User;
+
+  constructor(private twitch:TwitchService){
+
+    this.twitch.getUser().subscribe(e=>this.user=e);
+  }
+
+  navigateToOauth(){
+    this.twitch.redirectToOauth();
+
+  }
 }

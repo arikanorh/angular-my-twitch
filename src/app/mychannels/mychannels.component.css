@@ -4,8 +4,3 @@
   justify-content: space-around;
   position: relative;
 } 
-.loading{
-  position: absolute;
-  top: 0;
-  width: 100%;
-}

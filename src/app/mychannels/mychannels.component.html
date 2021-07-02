@@ -1,6 +1,5 @@
-    <app-loading class="loading"></app-loading>
 
-<ng-container appNavigatablelist>
+<ng-container appNavigatablelist (onload)="reloadFavs()">
    <app-channel-component 
     #nav 
     *ngFor="let channel of data$ | async ; trackBy:trackByFn" 

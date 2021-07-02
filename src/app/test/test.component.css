@@ -1,0 +1,36 @@
+.page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+}
+
+.content {
+    text-align: center;
+}
+
+.login {
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    border-radius: 4px;
+    background-color: #9147ff;
+    color: white;
+    padding: 5px 13px;
+}
+
+.login:hover {
+    background-color: #772ce8;
+}
+
+.text {
+    margin: 5px;
+}

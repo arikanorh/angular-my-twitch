@@ -66,8 +66,6 @@ export class ShowChanelComponent implements OnInit {
   }
 
   getBaseUrl() {
-    return window.location.origin
-      .replace("https://", "")
-      .replace("http://", "");
+    return window.location.hostname;
   }
 }

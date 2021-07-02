@@ -26,6 +26,7 @@ import { TestComponent } from './test/test.component';
 import { OauthComponent } from './oauth/oauth.component';
 import { CookieModule } from 'ngx-cookie';
 import { ResizePipe } from './pipe/resize.pipe';
+import { AuthGuardService } from './auth-guard.service';
 
 @NgModule({
   imports: [
@@ -36,12 +37,12 @@ import { ResizePipe } from './pipe/resize.pipe';
     RouterModule.forRoot(
       [
         { path: '', redirectTo: 'mychannels', pathMatch: 'full' },
-        { path: 'games', component: GamesComponent },
-        { path: 'channels', component: ChannelsComponent },
-        { path: 'channels/:id', component: ChannelsComponent },
+        { path: 'games', component: GamesComponent ,canActivate:[AuthGuardService]},
+        { path: 'channels', component: ChannelsComponent,canActivate:[AuthGuardService] },
+        { path: 'channels/:id', component: ChannelsComponent,canActivate:[AuthGuardService] },
         { path: 'show/:id', component: ShowChanelComponent },
-        { path: 'mychannels', component: MychannelsComponent },
-        { path: 'test', component: TestComponent },
+        { path: 'mychannels', component: MychannelsComponent,canActivate:[AuthGuardService] },
+        { path: 'login', component: TestComponent },
         { path: 'oauth_redirect', component: OauthComponent }
       ],
       { useHash: true }
@@ -77,10 +78,6 @@ import { ResizePipe } from './pipe/resize.pipe';
 })
 export class AppModule {
   constructor(twitch: TwitchService) {
-    if (twitch.hasAccessToken()) {
-      twitch.loadFavs();
-      twitch.l();
-    }
 
     document.addEventListener('visibilitychange', e => {
       if (document.visibilityState === 'visible') {

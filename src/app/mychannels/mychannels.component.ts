@@ -13,10 +13,13 @@ export class MychannelsComponent implements OnInit {
 
   ngOnInit() {
     this.data$ = this.twitch.getFavStreams();
-    this.twitch.loadFavs();
+    // this.reloadFavs();
   }
 
   trackByFn(channel) {
     return channel.id;
+  }
+  reloadFavs(){
+    this.twitch.loadFavs();
   }
 }

@@ -17,11 +17,11 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.channels$ = this.twitch.getStreamsOfGame(this.id);
+    this.channels$ = this.twitch.getStreamsOfGameFromAPI(this.id);
   }
 
-  trackByFn(channel) {
-    return channel.id;
+  trackByFn(index,stream:Stream) {
+    return stream.user_login;
   }
 
   reloadFavs() {

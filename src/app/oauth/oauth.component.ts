@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie';
-import { Constants } from '../model/Constants';
 import { TwitchService } from '../twitch.service';
 
 @Component({
@@ -14,8 +12,10 @@ export class OauthComponent implements OnInit {
     const x = route.snapshot.fragment;
     const access_token = new URLSearchParams(x).get('access_token');
 
-    twitch.setAccessToken(access_token);
-    rotuer.navigate(['/games']);
+    // twitch.setAccessToken(access_token);
+
+    // twitch.loadUser();
+    // rotuer.navigate(['/games']);
   }
 
   ngOnInit() {}

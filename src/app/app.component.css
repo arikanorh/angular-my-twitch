@@ -42,6 +42,11 @@ p {
   margin-top: 50px;
   position: relative;
 }
+.loading{
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
  
 .nav-left{
   display: flex;
@@ -55,10 +60,11 @@ p {
   display: flex;
   align-items: center;
 }
-.urhan{
+.oauth{
   background: white;
   color:#7550ba;
   padding:0 10px;
+  cursor: pointer;
 }
 .label{
   margin-left: 5px;
@@ -68,4 +74,31 @@ p {
  .label{
   display: none;
 }
+}
+
+
+.userdiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text{
+  margin-right: 5px;
+}
+.roundedbg{
+  height: 50px;
+  width: 50px;
+
+}
+.rounded{
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid white;
+  box-sizing: border-box;
+}
+.userimg{
+  height: 100%;
+  width: 100%;
 }
