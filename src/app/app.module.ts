@@ -26,11 +26,13 @@ import { TestComponent } from './test/test.component';
 import { OauthComponent } from './oauth/oauth.component';
 import { ResizePipe } from './pipe/resize.pipe';
 import { AuthGuardService } from './auth-guard.service';
+import { TwEmbedComponent } from './show-chanel/tw-embed/tw-embed.component';
+import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
 
 @NgModule({
   imports: [
     BrowserModule,
-        FormsModule,
+    FormsModule,
     HttpClientModule,
     RouterModule.forRoot(
       [
@@ -42,6 +44,7 @@ import { AuthGuardService } from './auth-guard.service';
         { path: 'mychannels', component: MychannelsComponent, canActivate: [AuthGuardService] },
         { path: 'login', component: TestComponent },
         { path: 'oauth_redirect', component: OauthComponent },
+        { path: 'embeds/:id', component: TwEmbedsComponent },
         { path: 'auto_redirect', redirectTo: 'mychannels', pathMatch: 'full' }
       ],
       { useHash: true }
@@ -66,7 +69,9 @@ import { AuthGuardService } from './auth-guard.service';
     LoadingComponent,
     TestComponent,
     OauthComponent,
-    ResizePipe
+    ResizePipe,
+    TwEmbedComponent,
+    TwEmbedsComponent
   ],
   bootstrap: [AppComponent],
   providers: [

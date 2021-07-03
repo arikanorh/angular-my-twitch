@@ -1,0 +1,55 @@
+.embeds {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    width: 100%;
+}
+
+.embeds>* {
+    flex: 1;
+}
+
+.channels {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: white;
+    width: 340px;
+    transform: translateX(100%);
+    transition: transform 200ms ease-in;
+    height: 100%;
+
+
+}
+
+.inner-menu {
+    position: relative;
+}
+
+.open-menu {
+    position: absolute;
+    top: 55px;
+    left: 0;
+    padding: 10px;
+    background-color: #7550ba;
+    color: white;
+    transform: translateX(-100%);
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.open-menu:hover {
+    color: #7550ba;
+    background-color: white;
+    border: 1px solid #7550ba;
+}
+
+.list {
+    height: 100%;
+    overflow: auto;
+}
+
+.channels.visible {
+    transform: translateX(0);
+
+}

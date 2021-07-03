@@ -1,0 +1,18 @@
+<div class="embeds" #embed>
+
+  <app-tw-embed *ngFor="let stream of streams" [id]="stream.id" [playing]="stream.playing" (videostatechange)="onReady($event)"></app-tw-embed>
+</div>
+
+
+<div class="channels" [class.visible]="showList">
+  <div class="inner-menu">
+
+    <div class="open-menu" (click)="toggleList()">
+      <mat-icon>menu_open</mat-icon>
+    </div>
+    <div class="list">
+      <app-mychannels>
+      </app-mychannels>
+    </div>
+  </div>
+</div>

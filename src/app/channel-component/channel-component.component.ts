@@ -24,7 +24,8 @@ export class ChannelComponentComponent implements OnInit,OnChanges {
   
   @HostListener('click')
   handleClick() {
-    this.router.navigate(['show', this.value.user_login]); //user_login
+    // this.router.navigate(['show', this.value.user_login]); //user_login
+    this.router.navigate(['embeds', this.value.user_login]); //user_login
   }
   //TODO move this to TwitchService
   goMobile() {
