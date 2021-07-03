@@ -19,7 +19,7 @@ export class ChannelComponentComponent implements OnInit,OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.channel_image = this.value.thumbnail_url;
+    this.channel_image = this.value.thumbnail_url+'?v='+Math.random();
   }
   
   @HostListener('click')

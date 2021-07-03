@@ -1,20 +1,25 @@
- 
-
 <div #wrapper class="wrapper">
 
-  <iframe class="video" #video *ngIf="url"
-    src=""
-     frameborder="0"
-    scrolling="no"
-    allowfullscreen="true"
-    tabindex="-1"
-    [src]="url">
-  </iframe>
-  <app-mychannels
-    class="channels" 
-    [class.visible]="showList">
-  </app-mychannels>
+  <div *ngFor="let stream of streams ;let i = index" class="videowrapper">
+    <div class="show-top stream-id" *ngIf="streams.length>1">{{stream.id}}</div>
+    <div class="show-top close" (click)="closeVideo(i)">X</div>
+
+    <iframe allow="autoplay" class="video" #video src="" frameborder="0" scrolling="no" allowfullscreen="true"
+      tabindex="-1" [src]="stream.url">
+    </iframe>
+  </div>
+
+  <div class="channels" [class.visible]="showList">
+    <div class="inner-menu">
+
+      <div class="open-menu" (click)="toggleList()">
+        <mat-icon>menu_open</mat-icon>
+      </div>
+      <div class="list">
+        <app-mychannels>
+        </app-mychannels>
+      </div>
+    </div>
+  </div>
 
 </div>
-
-  

@@ -24,26 +24,25 @@ import { LoadingService } from './loading/loading.service';
 import { LoaderInterceptor } from './htttp.interceptor';
 import { TestComponent } from './test/test.component';
 import { OauthComponent } from './oauth/oauth.component';
-import { CookieModule } from 'ngx-cookie';
 import { ResizePipe } from './pipe/resize.pipe';
 import { AuthGuardService } from './auth-guard.service';
 
 @NgModule({
   imports: [
     BrowserModule,
-    CookieModule.forRoot(),
-    FormsModule,
+        FormsModule,
     HttpClientModule,
     RouterModule.forRoot(
       [
         { path: '', redirectTo: 'mychannels', pathMatch: 'full' },
-        { path: 'games', component: GamesComponent ,canActivate:[AuthGuardService]},
-        { path: 'channels', component: ChannelsComponent,canActivate:[AuthGuardService] },
-        { path: 'channels/:id', component: ChannelsComponent,canActivate:[AuthGuardService] },
+        { path: 'games', component: GamesComponent, canActivate: [AuthGuardService] },
+        { path: 'channels', component: ChannelsComponent, canActivate: [AuthGuardService] },
+        { path: 'channels/:id', component: ChannelsComponent, canActivate: [AuthGuardService] },
         { path: 'show/:id', component: ShowChanelComponent },
-        { path: 'mychannels', component: MychannelsComponent,canActivate:[AuthGuardService] },
+        { path: 'mychannels', component: MychannelsComponent, canActivate: [AuthGuardService] },
         { path: 'login', component: TestComponent },
-        { path: 'oauth_redirect', component: OauthComponent }
+        { path: 'oauth_redirect', component: OauthComponent },
+        { path: 'auto_redirect', redirectTo: 'mychannels', pathMatch: 'full' }
       ],
       { useHash: true }
     ),

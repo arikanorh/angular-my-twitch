@@ -8,15 +8,14 @@ import { TwitchService } from '../twitch.service';
   styleUrls: ['./oauth.component.css']
 })
 export class OauthComponent implements OnInit {
-  constructor(route: ActivatedRoute, rotuer: Router, twitch: TwitchService) {
-    const x = route.snapshot.fragment;
-    const access_token = new URLSearchParams(x).get('access_token');
+  constructor(rotuer: Router, twitch: TwitchService) {
 
-    // twitch.setAccessToken(access_token);
 
-    // twitch.loadUser();
-    // rotuer.navigate(['/games']);
+    twitch.getUser().subscribe(e => {
+      if (e)
+        rotuer.navigate(["auto_redirect"]);
+    })
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

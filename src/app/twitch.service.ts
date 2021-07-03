@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError, tap, filter } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, ReplaySubject, throwError } from 'rxjs';
-import { CookieService } from 'ngx-cookie';
 import { Constants } from './model/Constants';
 import { Stream } from './model/Stream';
 import { Game } from './model/Game';
 import { User } from './model/User';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Injectable()
 export class TwitchService {
@@ -30,19 +28,17 @@ export class TwitchService {
   private user$ = this._user.asObservable();
 
   constructor(
-    private httpService: HttpClient,
-    private cookieService: CookieService,
-    route: ActivatedRoute,
-    private router: Router
+    private httpService: HttpClient
   ) {
 
     this.loadAccessToken();
 
-    this.getUser().subscribe(e => {
-      if (e) {
-        this.router.navigate(['games']);
-      }
-    })
+
+    // this.getUser().subscribe(e => {
+    //   if (e) {
+    //     this.router.navigate(['games']);
+    //   }
+    // })
 
     if (this.access_token) {
       this.loadUser();
@@ -90,7 +86,7 @@ export class TwitchService {
 
   private getGamesFromAPI(): Observable<Game[]> {
     return this.makeTwitchAPIRequest<Game>(
-      this.TWITCH_HELIX_API_URL + '/games/top?first=30'
+      this.TWITCH_HELIX_API_URL + '/games/top?first=100'
     );
   }
 
@@ -161,12 +157,13 @@ export class TwitchService {
 
 
   private getAccessTokenFromCookie(): string {
-    return this.cookieService.get(Constants.ACCESS_TOKEN);
+    return localStorage.getItem(Constants.ACCESS_TOKEN);
+
   }
   public setAccessToken(access_token: string) {
     console.log("Settings access token");
     this.access_token = access_token;
-    this.cookieService.put(Constants.ACCESS_TOKEN, access_token);
+    localStorage.setItem(Constants.ACCESS_TOKEN, access_token);
   }
 
   private loadAccessToken() {
