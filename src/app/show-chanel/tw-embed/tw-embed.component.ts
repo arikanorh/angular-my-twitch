@@ -6,7 +6,7 @@ import Twitch from 'src/assets/scripts/twitch.js';
   templateUrl: './tw-embed.component.html',
   styleUrls: ['./tw-embed.component.css']
 })
-export class TwEmbedComponent implements OnInit, AfterViewInit {
+export class TwEmbedComponent implements OnInit {
 
   player;
   // id = Math.random().toString(36).substring(7);
@@ -19,17 +19,13 @@ export class TwEmbedComponent implements OnInit, AfterViewInit {
     }
     this._id = value;
   }
-  _playing: boolean = false;
+  _playing: boolean = true;
   @Output() videostatechange = new EventEmitter<any>();
 
   @Input() set playing(value: boolean) {
     this._playing = value;
     if (this.player) {
-      if (this._playing) {
-        this.play();
-      } else {
-        this.pause();
-      }
+      this.startStopPlayer();
     }
   }
 
@@ -37,27 +33,18 @@ export class TwEmbedComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit() {
-    console.log("INIT " + this._id);
-
-    // this.route.params.subscribe(params => {
-    //   this.id = params.id;
 
 
-    // });
-
-  }
-
-  ngAfterViewInit(): void {
 
     let self = this;
 
-    let embed = new Twitch.Player(this._id, {
+    let embed = new Twitch.Player("twitch-embed", {
       width: "100%",
       height: "100%",
       channel: this._id,
-      autoplay: false,
+      autoplay: this._playing,
       // Only needed if this page is going to be embedded on other websites
-      parent: ["localhost", "othersite.example.com"]
+      parent: [this.getBaseUrl()]
     });
     this.player = embed.getPlayer();
 
@@ -85,5 +72,21 @@ export class TwEmbedComponent implements OnInit, AfterViewInit {
   a_seagull() {
     this.player.setChannel('a_seagull');
 
+  }
+
+  getBaseUrl() {
+    return window.location.hostname;
+  }
+  togglePlaying() {
+    this._playing = !this._playing;
+    this.startStopPlayer();
+  }
+
+  startStopPlayer() {
+    if (this._playing) {
+      this.play();
+    } else {
+      this.pause();
+    }
   }
 }

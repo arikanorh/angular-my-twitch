@@ -1,7 +1,6 @@
 <div class="embeds" #embed>
 
-  <app-tw-embed *ngFor="let stream of streams" [id]="stream.id" [playing]="stream.playing" (videostatechange)="onReady($event)"></app-tw-embed>
-</div>
+  <app-tw-embed [id]="id"></app-tw-embed>
 
 
 <div class="channels" [class.visible]="showList">
@@ -15,4 +14,5 @@
       </app-mychannels>
     </div>
   </div>
+</div>
 </div>

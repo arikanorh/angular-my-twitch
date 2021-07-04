@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-tw-embeds',
@@ -11,28 +11,22 @@ export class TwEmbedsComponent implements OnInit {
 
   showList: boolean = false;
 
-  streams = [];
+  id;
   playAll: boolean = false;
   lastStreamId;
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
 
+    this.id = this.route.snapshot.paramMap.get('id');
+
     this.route.params.subscribe(params => {
-      this.showList = false;
-      let id = params.id;
 
-      if (this.streams.length == 1) {
-        let firstElement = this.streams.shift();
-        firstElement.id = id;
-        this.streams.push(firstElement);
-      } else {
-
-        this.streams.push({
-          id: id,
-          playing: true
-        });
+      if (this.id !== params.id) {
+        this.lastStreamId = this.id;
+        this.id = params.id;
       }
+
     })
 
     window.addEventListener("keydown", this.eventListener);
@@ -58,19 +52,15 @@ export class TwEmbedsComponent implements OnInit {
     } else if (e.key === "ArrowDown") {
       if (!this.showList) {
         if (this.lastStreamId) {
-          let thisStreamId = this.streams[0].id;
-          this.streams[0].id = this.lastStreamId;
-          this.lastStreamId = thisStreamId;
+
+          this.router.navigate(['embeds', this.lastStreamId]);
+
         }
       }
     }
   };
 
   onReady(e) {
-    if (e.type == 'VIDEO_READY') {
-      console.log(e);
-      this.streams.filter(stream => stream.id !== e.id).forEach(e => e.playing = false);
-    }
 
   }
 
