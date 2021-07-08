@@ -1,6 +1,10 @@
-:host{
+:host {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   position: relative;
-} 
+}
+
+.min-width {
+  min-width: 320px !important;
+}
