@@ -1,18 +1,10 @@
 <div class="embeds" #embed>
 
-  <app-tw-embed [id]="id"></app-tw-embed>
 
-
-<div class="channels" [class.visible]="showList">
-  <div class="inner-menu">
-
-    <div class="open-menu" (click)="toggleList()">
-      <mat-icon>menu_open</mat-icon>
-    </div>
-    <div class="list">
-      <app-mychannels class="small">
-      </app-mychannels>
-    </div>
+  <app-tw-embed [id]="id" (videostatechange)="videostatechange($event)" class="video"></app-tw-embed>
+  <div *ngIf="selectedStream" class="last-stream-id" [class.idle]="this.idle">
+    {{this.index+1+ '/'+ this.ids.length}} {{selectedStream.user_login}} - {{selectedStream.game_name}}
+    <ng-container *ngIf="this.refreshRequest">(!)</ng-container>
   </div>
-</div>
+
 </div>

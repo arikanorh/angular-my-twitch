@@ -1,4 +1,8 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+:root{
+    --main-color:#7550ba;
+}
 body {
     margin: 0;
     padding: 0;

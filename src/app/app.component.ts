@@ -1,25 +1,32 @@
 import { Component } from '@angular/core';
 import { TwitchService } from './twitch.service';
-import {  Observable } from 'rxjs';
 import { User } from './model/User';
+import { DebugService } from './devthings/debug-service.service';
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.css' ]
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent   {
+export class AppComponent {
 
 
-  user:User;
+  user: User;
 
-  constructor(private twitch:TwitchService){
+  constructor(private twitch: TwitchService, private debugService:DebugService) {
 
-    this.twitch.getUser().subscribe(e=>this.user=e);
+    this.twitch.getUser().subscribe(e => this.user = e);
+
   }
 
-  navigateToOauth(){
+  navigateToOauth() {
     this.twitch.redirectToOauth();
 
   }
+
+  openDebugMenu(){
+    this.debugService.setVisible(true);
+
+  }
+
 }

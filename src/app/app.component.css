@@ -11,6 +11,7 @@ p {
   position: fixed;
   top:0;
   width: 100%;
+  z-index: 1;
 }
 .nav-link{
   height: 100%;
@@ -101,4 +102,42 @@ p {
 .userimg{
   height: 100%;
   width: 100%;
+}
+
+.debug{
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;
+  position: relative;
+  margin-right: 5px;
+
+} 
+.debug::after{
+  content: "Debug";
+  position: absolute;
+  bottom: 0;
+  color: #7550ba;
+  transform: translateY(100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  font-size: 18px;
+  padding: 0 10px;
+  left: 0;
+  height: 35px;
+  opacity: 0;
+  pointer-events: none;
+
+}
+
+.debug:hover{
+  background-color: white;
+  color:var(--main-color);
+}
+.debug:hover::after{
+  opacity: 1;
 }

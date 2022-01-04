@@ -23,7 +23,7 @@
 
 .img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 180px;
   width: 100%;
   min-height: 135px;
 }
@@ -131,7 +131,8 @@
 .small .img {
   display: none;
 }
-.small .title{
+
+.small .title {
   background: #7550ba;
   color: white;
   padding: 5px;

@@ -4,51 +4,57 @@ import {
   ContentChildren,
   AfterViewInit,
   QueryList,
-  AfterContentChecked,
   OnDestroy,
   Output,
   EventEmitter
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TwitchService } from './twitch.service';
+import { DebugService } from './devthings/debug-service.service';
 
 @Directive({
   selector: '[appNavigatablelist]'
 })
-export class NavigatablelistDirective
-  implements AfterViewInit, AfterContentChecked, OnDestroy {
+export class NavigatablelistDirective implements AfterViewInit, OnDestroy {
   @ContentChildren('nav', { read: ElementRef }) channels: QueryList<ElementRef>;
   @Output() onload = new EventEmitter<void>();
   focusIndex = 0;
   listener;
   sub: Subscription;
+  sub2: Subscription;
   vertical: boolean = false;
   rowCount = 1;
 
-  constructor(private twitch: TwitchService) {}
+  constructor(private debugService: DebugService) {
+    this.debugService.addLog("NavigatablelistDirective init");
 
-  ngAfterContentChecked() {
-    try {
-      if (!this.hasCurrentFocus()) {
-        this.focusIndex = 0;
-        this.focusCurrentElement();
-      }
-    } catch (err) {}
-    this.vertical = this.isVertical(this.channels.toArray());
-    this.rowCount = this.getRowCount(this.channels.toArray());
   }
-
   ngAfterViewInit(): void {
-    window.addEventListener('keydown', this.eventListener);
-  }
-  ngOnDestroy() {
-    window.removeEventListener('keydown', this.eventListener);
-    if (this.sub) {
-      this.sub.unsubscribe();
+
+    this.debugService.addLog("Subbing changess");
+
+    this.sub2 = this.channels.changes.subscribe(e => {
+
+      this.detectLayout();
+
+    });
+
+    if (this.channels) {
+      this.detectLayout();
     }
+
+
+    this.debugService.addLog('registering keydown');
+
+    window.addEventListener('keydown', this.eventListener, false);
+    this.debugService.addLog('Keydown registered');
   }
 
-  eventListener = (e: KeyboardEvent) => {
+
+  eventListener = (e: any) => {
+    if (e.ignore)
+      return;
+
+
     let backwards = 'ArrowLeft';
     let forwards = 'ArrowRight';
     let nextRow = 'ArrowDown';
@@ -58,11 +64,12 @@ export class NavigatablelistDirective
     if (this.vertical) {
       backwards = 'ArrowUp';
       forwards = 'ArrowDown';
-      previousRow = 'ArrowLeft';
+      previousRow = '';
       nextRow = 'ignore';
       preventDefault = [];
       refreshKeys = ['ArrowUp'];
     }
+
     if (preventDefault.indexOf(e.key) >= 0) {
       e.preventDefault();
     }
@@ -97,13 +104,30 @@ export class NavigatablelistDirective
     return false;
   };
 
+  private detectLayout() {
+    this.debugService.addLog("Detecting layout");
+    try {
+      if (!this.hasCurrentFocus()) {
+        this.focusIndex = 0;
+        this.focusCurrentElement();
+      }
+    } catch (err) { }
+    this.vertical = this.isVertical(this.channels.toArray());
+    this.rowCount = this.getRowCount(this.channels.toArray());
+
+    this.debugService.addLog('Vertical :' + this.vertical + " Rowc :" + this.rowCount);
+  }
+
   focusCurrentElement() {
     if (this.focusIndex < 0) this.focusIndex = 0;
     else if (this.focusIndex >= this.channels.length) {
       this.focusIndex = 0;
     }
     let element = this.channels.toArray()[this.focusIndex].nativeElement;
+    this.debugService.addLog("Focus index :" + this.focusIndex);
+
     element.focus();
+
   }
 
   hasCurrentFocus() {
@@ -134,5 +158,16 @@ export class NavigatablelistDirective
       currentIndex++;
     }
     return currentIndex;
+  }
+
+  ngOnDestroy() {
+    this.debugService.addLog("Destroing NavigatablelistDirective")
+    window.removeEventListener('keydown', this.eventListener);
+    // this.channels.destroy();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+    if (this.sub2)
+      this.sub2.unsubscribe();
   }
 }

@@ -28,6 +28,9 @@ import { ResizePipe } from './pipe/resize.pipe';
 import { AuthGuardService } from './auth-guard.service';
 import { TwEmbedComponent } from './show-chanel/tw-embed/tw-embed.component';
 import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
+import { DummyChannelsComponent } from './devthings/dummy-channels/dummy-channels.component';
+import { DebugPanelComponent } from './devthings/debug-panel/debug-panel.component';
+import { DebugService } from './devthings/debug-service.service';
 
 @NgModule({
   imports: [
@@ -42,9 +45,10 @@ import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
         { path: 'channels/:id', component: ChannelsComponent, canActivate: [AuthGuardService] },
         { path: 'show/:id', component: ShowChanelComponent },
         { path: 'mychannels', component: MychannelsComponent, canActivate: [AuthGuardService] },
-        { path: 'login', component: TestComponent },
-        { path: 'oauth_redirect', component: OauthComponent },
+        { path: 'login', component: DummyChannelsComponent },
+        { path: 'oauth_redirect', component: TestComponent },
         { path: 'embeds/:id', component: TwEmbedsComponent },
+        { path: 'dummy', component: DummyChannelsComponent },
         { path: 'auto_redirect', redirectTo: 'mychannels', pathMatch: 'full' }
       ],
       { useHash: true }
@@ -71,7 +75,9 @@ import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
     OauthComponent,
     ResizePipe,
     TwEmbedComponent,
-    TwEmbedsComponent
+    TwEmbedsComponent,
+    DummyChannelsComponent,
+    DebugPanelComponent
   ],
   bootstrap: [AppComponent],
   providers: [
@@ -81,15 +87,23 @@ import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
   ]
 })
 export class AppModule {
-  constructor(twitch: TwitchService) {
+  constructor(twitch: TwitchService, private debugService: DebugService) {
+
+    debugService.addLog('App Init');
 
     document.addEventListener('visibilitychange', e => {
+      debugService.addLog('Browser Visibility Change ->' + document.visibilityState);
+
       if (document.visibilityState === 'visible') {
         if (environment.production) {
-          console.log('Refreshing favs if production ', environment.production);
+          console.log('Refreshing favs due to visiblity change', environment.production);
           twitch.loadFavs();
         }
       }
     });
+
   }
+
+
+
 }
