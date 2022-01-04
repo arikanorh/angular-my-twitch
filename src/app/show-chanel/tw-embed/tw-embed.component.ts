@@ -44,15 +44,13 @@ export class TwEmbedComponent implements OnInit {
     this.player = embed.getPlayer();
 
     embed.addEventListener(Twitch.Embed.VIDEO_READY, function () {
+      self.debugService.addLog("Settings volume to 100%");
+      self.player.setVolume(1);
       self.videostatechange.emit({ id: self._id, type: VideoState.VIDEO_READY });
     });
 
-    embed.addEventListener('keydown', function () {
-      this.debugService.addLog("keydown");
-    });
 
     embed.addEventListener(Twitch.Embed.VIDEO_PLAY, function (e) {
-      self.player.setVolume(1);
       self.videostatechange.emit({ id: self._id, type: VideoState.VIDEO_PLAY });
     });
 
