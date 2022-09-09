@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DebugService {
-
   private _logs = new ReplaySubject<string>();
   private logs = this._logs.asObservable();
 
@@ -28,9 +27,9 @@ export class DebugService {
     this.addLogWith(log, null);
   }
   public addLogWith(log: string, obj: any) {
-    let line: string = this.formatDate(new Date()) + " : " + log;
+    let line: string = this.formatDate(new Date()) + ' : ' + log;
     if (obj) {
-      line += " -> " + JSON.stringify(obj);
+      line += ' -> ' + JSON.stringify(obj);
     }
     this._logs.next(line);
   }
@@ -43,15 +42,18 @@ export class DebugService {
     this._visible.next(isvisible);
   }
 
-
   private formatDate(m: Date) {
-    return this.padZero(m.getUTCHours()) + ":" + this.padZero(m.getUTCMinutes()) + ":" + this.padZero(m.getUTCSeconds());
+    return (
+      this.padZero(m.getUTCHours()) +
+      ':' +
+      this.padZero(m.getUTCMinutes()) +
+      ':' +
+      this.padZero(m.getUTCSeconds())
+    );
   }
 
   private padZero(num: number) {
-    if (num < 10)
-      return "0" + num;
-    else
-      return num;
+    if (num < 10) return '0' + num;
+    else return num;
   }
 }
