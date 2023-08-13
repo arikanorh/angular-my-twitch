@@ -3,97 +3,119 @@ import {
   ElementRef,
   ContentChildren,
   AfterViewInit,
-  OnInit,
   QueryList,
-  AfterContentChecked,
-  OnDestroy
-} from "@angular/core";
-import { Observable, Subscription } from "rxjs";
-import { TwitchService } from "./twitch.service";
+  OnDestroy,
+  Output,
+  EventEmitter
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { DebugService } from './devthings/debug-service.service';
 
 @Directive({
-  selector: "[appNavigatablelist]"
+  selector: '[appNavigatablelist]'
 })
-export class NavigatablelistDirective
-  implements AfterViewInit, AfterContentChecked, OnDestroy {
-  @ContentChildren("nav", { read: ElementRef }) channels: QueryList<ElementRef>;
+export class NavigatablelistDirective implements AfterViewInit, OnDestroy {
+  @ContentChildren('nav', { read: ElementRef }) channels: QueryList<ElementRef>;
+  @Output() onload = new EventEmitter<void>();
   focusIndex = 0;
   listener;
   sub: Subscription;
+  sub2: Subscription;
   vertical: boolean = false;
   rowCount = 1;
 
-  constructor(private twitch: TwitchService) {}
+  constructor(private debugService: DebugService) {
+    this.debugService.addLog("NavigatablelistDirective init");
 
-  ngAfterContentChecked() {
+  }
+  ngAfterViewInit(): void {
+
+    this.debugService.addLog("Subbing changess");
+
+    this.sub2 = this.channels.changes.subscribe(e => {
+
+      this.detectLayout();
+
+    });
+
+    if (this.channels) {
+      this.detectLayout();
+    }
+
+
+    this.debugService.addLog('registering keydown');
+
+    window.addEventListener('keydown', this.eventListener, false);
+    this.debugService.addLog('Keydown registered');
+  }
+
+
+  eventListener = (e: any) => {
+    if (e.ignore)
+      return;
+
+
+    let backwards = 'ArrowLeft';
+    let forwards = 'ArrowRight';
+    let nextRow = 'ArrowDown';
+    let previousRow = 'ArrowUp';
+    let preventDefault = ['ArrowUp', 'ArrowDown'];
+    let refreshKeys = ['ArrowLeft', 'ArrowUp'];
+    if (this.vertical) {
+      backwards = 'ArrowUp';
+      forwards = 'ArrowDown';
+      previousRow = '';
+      nextRow = 'ignore';
+      preventDefault = [];
+      refreshKeys = ['ArrowUp'];
+    }
+
+    if (preventDefault.indexOf(e.key) >= 0) {
+      e.preventDefault();
+    }
+    if (this.focusIndex === 0 && refreshKeys.indexOf(e.key) >= 0) {
+      this.onload.emit();
+    }
+
+    if (!this.hasCurrentFocus()) {
+      this.focusIndex = 0;
+      this.focusCurrentElement();
+    } else if (e.key === previousRow) {
+      this.focusIndex -= this.rowCount;
+      this.focusCurrentElement();
+    } else if (e.key === forwards) {
+      this.focusIndex++;
+      this.focusCurrentElement();
+    } else if (e.key === nextRow) {
+      this.focusIndex += this.rowCount;
+      this.focusCurrentElement();
+    } else if (e.key === backwards) {
+      this.focusIndex--;
+      this.focusCurrentElement();
+      e.preventDefault();
+    } else if (e.key === 'Enter') {
+      this.channels.toArray()[this.focusIndex].nativeElement.click();
+    }
+
+    if (this.focusIndex === 0) {
+      document.querySelector('.router').scrollTo(0, 0);
+    }
+
+    return false;
+  };
+
+  private detectLayout() {
+    this.debugService.addLog("Detecting layout");
     try {
       if (!this.hasCurrentFocus()) {
         this.focusIndex = 0;
         this.focusCurrentElement();
       }
-    } catch (err) {}
+    } catch (err) { }
     this.vertical = this.isVertical(this.channels.toArray());
     this.rowCount = this.getRowCount(this.channels.toArray());
-  }
 
-  ngAfterViewInit(): void {
-    window.addEventListener("keydown", this.eventListener);
-
-  }
-  ngOnDestroy() {
-    window.removeEventListener("keydown", this.eventListener);
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-   }
-
-  eventListener = (e: KeyboardEvent) =>{
-    let backwards = "ArrowLeft";
-      let forwards = "ArrowRight";
-      let nextRow = "ArrowDown";
-      let previousRow = "ArrowUp";
-      let preventDefault = ["ArrowUp", "ArrowDown"];
-      let refreshKeys=["ArrowLeft","ArrowUp"];
-      if (this.vertical) {
-        backwards = "ArrowUp";
-        forwards = "ArrowDown";
-        previousRow = "ArrowLeft";
-        nextRow = "ignore";
-        preventDefault = [];
-        refreshKeys=["ArrowUp"];
-      }
-      if (preventDefault.indexOf(e.key) >= 0) {
-        e.preventDefault();
-      }
-      if(this.focusIndex===0 && refreshKeys.indexOf(e.key)>=0){
-        this.twitch.loadFavs();
-      }
-
-      if (!this.hasCurrentFocus()) {
-        this.focusIndex = 0;
-        this.focusCurrentElement();
-      } else if (e.key === previousRow) {
-        this.focusIndex -= this.rowCount;
-        this.focusCurrentElement();
-      } else if (e.key === forwards) {
-        this.focusIndex++;
-        this.focusCurrentElement();
-      } else if (e.key === nextRow) {
-        this.focusIndex += this.rowCount;
-        this.focusCurrentElement();
-      } else if (e.key === backwards) {
-        this.focusIndex--;
-        this.focusCurrentElement();
-        e.preventDefault();
-      } else if (e.key === "Enter") {
-        this.channels.toArray()[this.focusIndex].nativeElement.click();
-      }
-
-      if(this.focusIndex===0){
-        document.querySelector('.router').scrollTo(0,0)
-      }
-
-      return false;
+    this.debugService.addLog('Vertical :' + this.vertical + " Rowc :" + this.rowCount);
   }
 
   focusCurrentElement() {
@@ -102,7 +124,10 @@ export class NavigatablelistDirective
       this.focusIndex = 0;
     }
     let element = this.channels.toArray()[this.focusIndex].nativeElement;
+    this.debugService.addLog("Focus index :" + this.focusIndex);
+
     element.focus();
+
   }
 
   hasCurrentFocus() {
@@ -133,5 +158,16 @@ export class NavigatablelistDirective
       currentIndex++;
     }
     return currentIndex;
+  }
+
+  ngOnDestroy() {
+    this.debugService.addLog("Destroing NavigatablelistDirective")
+    window.removeEventListener('keydown', this.eventListener);
+    // this.channels.destroy();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+    if (this.sub2)
+      this.sub2.unsubscribe();
   }
 }

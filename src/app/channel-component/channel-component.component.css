@@ -1,8 +1,9 @@
-:host{
-  max-width: 420px;
+:host {
+  max-width: 350px;
   flex: 1;
-  min-width: 300px;
   margin: 10px;
+  width: 100%;
+  min-width: 250px;
 }
 
 .stream_img {
@@ -10,64 +11,60 @@
   border-radius: 1px;
   cursor: pointer;
   width: 100%;
-  max-width: 420px;
   box-sizing: border-box;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s;
-  padding: 2px; 
+  padding: 2px;
+}
 
+.img-panel {
+  position: relative;
 }
-.img-panel{
-   position: relative;
-}
-.img{
+
+.img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 180px;
   width: 100%;
-  min-height: 150px
+  min-height: 135px;
 }
 
-
-:host:focus{
+:host:focus {
   outline: none;
 }
 
-
-:host:hover .stream_img{
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-
+:host:hover .stream_img {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
-
 
 :host:focus .stream_img {
-       background: #7550ba;
-    color: white;
+  background: #7550ba;
+  color: white;
 }
 
-
-.content{
+.content {
   padding: 5px 5px;
   display: flex;
   flex-direction: column;
 }
 
-.title{
+.title {
   position: absolute;
   top: 0;
   left: 0;
   color: black;
-   background-color: white;
+  background-color: white;
   font-weight: bold;
-   padding: 0 5px;
+  padding: 0 5px;
   border-radius: 4px;
   margin: 5px;
 }
-:host:focus .title{
+
+:host:focus .title {
   background-color: #7550ba;
-  color:wh
+  color: white;
 }
 
-.mobile{
+.mobile {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -83,30 +80,31 @@
   border-radius: 3px;
   border: 1px solid;
 }
+
 /*
 :host:hover .mobile{
   display: flex;
 }
 */
 
-.mobile:hover{
+.mobile:hover {
   opacity: 1;
   border: 1px solid #7550ba;
 }
 
-.channel-status{
-  font-size:smaller;
+.channel-status {
+  font-size: smaller;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.viewer-count{
+.viewer-count {
   display: inline;
   position: absolute;
-  right:0;
-  top:0;
+  right: 0;
+  top: 0;
   margin: 5px;
   background: #302a2a;
   font-size: small;
@@ -115,6 +113,27 @@
   padding: 2px;
 }
 
-.game-name{
+.game-name {
   font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.small .img {
+  display: none;
+}
+
+.small .img-panel {
+  height: 40px;
+}
+
+.small .img {
+  display: none;
+}
+
+.small .title {
+  background: #7550ba;
+  color: white;
+  padding: 5px;
 }

@@ -1,11 +1,10 @@
-:host{
+:host {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   position: relative;
-} 
-.loading{
-  position: absolute;
-  top: 0;
-  width: 100%;
+}
+
+.min-width {
+  min-width: 320px !important;
 }

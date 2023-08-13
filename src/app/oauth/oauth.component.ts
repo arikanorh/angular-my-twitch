@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TwitchService } from '../twitch.service';
 
 @Component({
   selector: 'app-oauth',
@@ -7,11 +8,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./oauth.component.css']
 })
 export class OauthComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {
-    console.log('Oauth page 2');
-    const x = this.route.snapshot.fragment;
-    console.log(x);
+  constructor(rotuer: Router, twitch: TwitchService) {
+
+
+    twitch.getUser().subscribe(e => {
+      if (e)
+        rotuer.navigate(["auto_redirect"]);
+    })
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

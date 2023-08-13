@@ -24,6 +24,13 @@ import { LoadingService } from './loading/loading.service';
 import { LoaderInterceptor } from './htttp.interceptor';
 import { TestComponent } from './test/test.component';
 import { OauthComponent } from './oauth/oauth.component';
+import { ResizePipe } from './pipe/resize.pipe';
+import { AuthGuardService } from './auth-guard.service';
+import { TwEmbedComponent } from './show-chanel/tw-embed/tw-embed.component';
+import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
+import { DummyChannelsComponent } from './devthings/dummy-channels/dummy-channels.component';
+import { DebugPanelComponent } from './devthings/debug-panel/debug-panel.component';
+import { DebugService } from './devthings/debug-service.service';
 
 @NgModule({
   imports: [
@@ -33,13 +40,16 @@ import { OauthComponent } from './oauth/oauth.component';
     RouterModule.forRoot(
       [
         { path: '', redirectTo: 'mychannels', pathMatch: 'full' },
-        { path: 'games', component: GamesComponent },
-        { path: 'channels', component: ChannelsComponent },
-        { path: 'channels/:id', component: ChannelsComponent },
+        { path: 'games', component: GamesComponent, canActivate: [AuthGuardService] },
+        { path: 'channels', component: ChannelsComponent, canActivate: [AuthGuardService] },
+        { path: 'channels/:id', component: ChannelsComponent, canActivate: [AuthGuardService] },
         { path: 'show/:id', component: ShowChanelComponent },
-        { path: 'mychannels', component: MychannelsComponent },
-        { path: 'test', component: TestComponent },
-        { path: 'oauth_redirect', component: OauthComponent }
+        { path: 'mychannels', component: MychannelsComponent, canActivate: [AuthGuardService] },
+        { path: 'login', component: DummyChannelsComponent },
+        { path: 'oauth_redirect', component: TestComponent },
+        { path: 'embeds/:id', component: TwEmbedsComponent },
+        { path: 'dummy', component: DummyChannelsComponent },
+        { path: 'auto_redirect', redirectTo: 'mychannels', pathMatch: 'full' }
       ],
       { useHash: true }
     ),
@@ -62,7 +72,12 @@ import { OauthComponent } from './oauth/oauth.component';
     NavigatablelistDirective,
     LoadingComponent,
     TestComponent,
-    OauthComponent
+    OauthComponent,
+    ResizePipe,
+    TwEmbedComponent,
+    TwEmbedsComponent,
+    DummyChannelsComponent,
+    DebugPanelComponent
   ],
   bootstrap: [AppComponent],
   providers: [
@@ -72,16 +87,23 @@ import { OauthComponent } from './oauth/oauth.component';
   ]
 })
 export class AppModule {
-  constructor(twitch: TwitchService) {
-    twitch.loadFavs();
+  constructor(twitch: TwitchService, private debugService: DebugService) {
+
+    debugService.addLog('App Init');
 
     document.addEventListener('visibilitychange', e => {
+      debugService.addLog('Browser Visibility Change ->' + document.visibilityState);
+
       if (document.visibilityState === 'visible') {
-        console.log('Refreshing favs if production ', environment.production);
         if (environment.production) {
+          console.log('Refreshing favs due to visiblity change', environment.production);
           twitch.loadFavs();
         }
       }
     });
+
   }
+
+
+
 }

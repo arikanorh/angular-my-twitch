@@ -1,4 +1,8 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+:root{
+    --main-color:#7550ba;
+}
 body {
     margin: 0;
     padding: 0;
@@ -9,4 +13,20 @@ body {
     position: absolute;
 
 }
-  
+
+.small .img-panel{
+    height: 25px;
+}
+.small .img{
+    opacity: 0;
+}
+.small .title{
+    background: #7550ba;
+    color: white;
+    font-weight: normal;
+}
+.small app-channel-component{
+    margin: 0px;
+    border: 1px solid #7550ba;
+    min-width: initial;
+}

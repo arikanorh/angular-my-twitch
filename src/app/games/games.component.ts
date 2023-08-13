@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { TwitchService } from '../twitch.service';
+import { Game } from '../model/Game';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-games',
@@ -8,18 +9,23 @@ import { TwitchService } from '../twitch.service';
   styleUrls: ['./games.component.css']
 })
 export class GamesComponent implements OnInit {
-  games;
- 
-  constructor(private twitch:TwitchService){
- 
-  }
+  games$: Observable<Game[]>;
 
-  ngOnInit(){
-    this.twitch.getGames().subscribe(
-      e=>{
-        this.games = e.top; 
-      }
-    );
+  constructor(private twitch: TwitchService) {
 
   }
+
+  ngOnInit() {
+    this.games$ = this.twitch.getGames();
+    this.reloadGames();
+  }
+
+  reloadGames() {
+    this.twitch.loadGames();
+  }
+
+  trackByFn(index,game:Game) {
+    return game.id;
+  }
+
 }

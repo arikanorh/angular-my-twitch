@@ -1,0 +1,31 @@
+.embeds {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+}
+
+.video {
+    flex: 1;
+
+}
+
+
+.last-stream-id {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: red;
+    background: var(--main-color);
+    color: white;
+    padding: 5px 10px;
+    margin-top: 2px;
+    border-radius: 3px;
+    margin-left: 1px;
+    opacity: 1;
+}
+
+.last-stream-id.idle {
+    opacity: .5;
+}

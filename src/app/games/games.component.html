@@ -1,11 +1,6 @@
-<ng-container appNavigatablelist>
+<ng-container appNavigatablelist (onload)="reloadGames()"> 
 
-<app-game
-  #nav
-  *ngFor="let game of games ;let i = index" 
-  [attr.tabindex]="i+1"  
-  [value]="game" 
-  [routerLink]="['/channels',game.game.name]"
-  tabindex="0"
-  >
-</app-game></ng-container>
+  <app-game #nav *ngFor="let game of games$ | async ; trackBy:trackByFn ;let i = index" [attr.tabindex]="i+1" [value]="game"
+    [routerLink]="['/channels',game.id]" tabindex="0">
+  </app-game>
+</ng-container>

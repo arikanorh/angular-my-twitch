@@ -1,0 +1,96 @@
+.host {
+    position: absolute;
+    width: 450px;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(0 0 0 / 83%);
+    overflow-y: auto;
+    border-top: none;
+    color: #2eff00;
+    font-size: 13px;
+    z-index: 99;
+
+}
+
+.host.docked-right {
+    left: initial;
+    right: 0;
+}
+
+.adb {
+    background-color: var(--main-color);
+    color: white;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    background-color: var(--main-color);
+    font-size: 20px;
+    color: white;
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.log {}
+
+.content {
+    height: 500px;
+    overflow: auto;
+    border: 3px solid var(--main-color);
+    border-width: 0px 3px 0 0;
+    padding: 5px;
+}
+
+.title-wrapper {
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
+
+.clear {
+    background-color: white;
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+
+.icons {
+    display: flex;
+    align-items: center;
+    color: var(--main-color);
+    height: 100%;
+
+}
+
+.clear:hover {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.shrink .content {
+    display: none;
+}
+
+.icon {
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: var(--main-color);
+    color: White;
+}
+
+.icon:hover {
+    color: var(--main-color);
+    background-color: white;
+}
+
+.shrink .hidden-on-shrink {
+    display: none;
+}

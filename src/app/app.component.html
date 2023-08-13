@@ -17,13 +17,28 @@
 				</div>
 			</div>
 		</div>
-		<div class="nav-right urhan" title="Burda bişi yok" routerLink="test">
-			 <app-logo></app-logo>
+		<div class="debug" (click)="openDebugMenu()">
+			<mat-icon>adb</mat-icon>
+		</div>
+		<div *ngIf="!user" class="nav-right oauth" title="Login to twitch" (click)="navigateToOauth()">
+			<app-logo></app-logo>
+		</div>
+		<div *ngIf="user" class="userdiv">
+			<div class="text"> {{user.display_name}}</div>
+			<div class="roundedbg">
+				<div class="rounded">
+					<img [src]="user.profile_image_url" class="userimg">
+				</div>
+			</div>
 		</div>
 
 	</div>
 	<div class="router">
+		<app-loading class="loading"></app-loading>
 
 		<router-outlet></router-outlet>
 	</div>
 </div>
+
+
+<app-debug-panel></app-debug-panel>

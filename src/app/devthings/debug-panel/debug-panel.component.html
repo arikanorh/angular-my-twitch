@@ -1,0 +1,32 @@
+<div class="host" *ngIf="visible" [class.shrink]="!this.expanded" [class.docked-right]="!this.left">
+
+  <div class="title-wrapper">
+    <mat-icon class="adb">adb</mat-icon>
+    <div class="title">
+      Debug View
+    </div>
+    <div class="icons">
+
+      
+      <div class="icon hidden-on-shrink" (click)="clearLogs()" title="Clear Logs">
+        <mat-icon>delete</mat-icon>
+      </div>
+    
+      <mat-icon class="icon right hidden-on-shrink" (click)="this.left=false" *ngIf="this.left" title="Dock Right">chevron_right
+      </mat-icon>
+      <mat-icon class="icon left hidden-on-shrink" (click)="this.left=true" *ngIf="!this.left" title="Dock left">chevron_left</mat-icon>
+      <div class="icon" (click)="this.expanded = !this.expanded" title="Minimize">
+        <mat-icon>minimize</mat-icon>
+      </div>
+      <div class="icon hidden-on-shrink" (click)="close()" title="Close">
+        <mat-icon>clear</mat-icon>
+      </div>
+    </div>
+
+  </div>
+  <div class="content">
+    <div class="log" *ngFor="let log of logs">
+      {{log}}
+    </div>
+  </div>
+</div>

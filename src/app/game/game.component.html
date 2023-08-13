@@ -1,4 +1,3 @@
-<div class='game_item' id="{{game_id}}">
-	<img loading="lazy" src="{{ game_image }}" draggable="false"><br><b>{{game_name}}</b><br/>
-	<div class='game_status'> {{game_viewers}} viewers</div>
+<div class='game_item' id="{{value.id}}">
+	<img loading="lazy" src="{{ value.box_art_url | resize:150:210 }}" draggable="false"><br><b class="game_name">{{value.name}}</b><br/>
 </div>

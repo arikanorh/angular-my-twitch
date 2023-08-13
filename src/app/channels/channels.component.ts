@@ -1,29 +1,30 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute } from "@angular/router";
-import { TwitchService } from "../twitch.service";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TwitchService } from '../twitch.service';
+import { Stream } from '../model/Stream';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: "app-channels",
-  templateUrl: "./channels.component.html",
-  styleUrls: ["./channels.component.css"]
+  selector: 'app-channels',
+  templateUrl: './channels.component.html',
+  styleUrls: ['./channels.component.css']
 })
 export class ChannelsComponent implements OnInit {
-  channels$;
-  name;
-  constructor(
-    private httpService: HttpClient,
-    route: ActivatedRoute,
-    private twitch: TwitchService
-  ) {
-    this.name = route.snapshot.params.id;
+  channels$: Observable<Stream[]>;
+  id;
+  constructor(route: ActivatedRoute, private twitch: TwitchService) {
+    this.id = route.snapshot.params.id;
   }
 
   ngOnInit() {
-    this.channels$ = this.twitch.getChannelsOfGame(this.name);
+    this.channels$ = this.twitch.getStreamsOfGameFromAPI(this.id);
   }
-  
-  trackByFn(channel) {
-    return channel._id;
+
+  trackByFn(index,stream:Stream) {
+    return stream.user_login;
+  }
+
+  reloadFavs() {
+    this.twitch.loadFavs();
   }
 }
