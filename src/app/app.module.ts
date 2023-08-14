@@ -30,6 +30,7 @@ import { TwEmbedComponent } from './show-chanel/tw-embed/tw-embed.component';
 import { DummyChannelsComponent } from './devthings/dummy-channels/dummy-channels.component';
 import { DebugPanelComponent } from './devthings/debug-panel/debug-panel.component';
 import { DebugService } from './devthings/debug-service.service';
+import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,7 @@ import { DebugService } from './devthings/debug-service.service';
         { path: 'games', component: GamesComponent, canActivate: [AuthGuardService] },
         { path: 'channels', component: ChannelsComponent, canActivate: [AuthGuardService] },
         { path: 'channels/:id', component: ChannelsComponent, canActivate: [AuthGuardService] },
-        { path: 'show/:id', component: ShowChanelComponent },
+        { path: 'embeds/:id', component: TwEmbedsComponent },
         { path: 'mychannels', component: MychannelsComponent, canActivate: [AuthGuardService] },
         { path: 'login', component: DummyChannelsComponent },
         { path: 'oauth_redirect', component: TestComponent },
@@ -73,6 +74,7 @@ import { DebugService } from './devthings/debug-service.service';
     OauthComponent,
     ResizePipe,
     TwEmbedComponent,
+    TwEmbedsComponent,
     DummyChannelsComponent,
     DebugPanelComponent
   ],
