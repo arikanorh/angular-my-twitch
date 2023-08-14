@@ -27,7 +27,6 @@ import { OauthComponent } from './oauth/oauth.component';
 import { ResizePipe } from './pipe/resize.pipe';
 import { AuthGuardService } from './auth-guard.service';
 import { TwEmbedComponent } from './show-chanel/tw-embed/tw-embed.component';
-import { TwEmbedsComponent } from './show-chanel/tw-embeds/tw-embeds.component';
 import { DummyChannelsComponent } from './devthings/dummy-channels/dummy-channels.component';
 import { DebugPanelComponent } from './devthings/debug-panel/debug-panel.component';
 import { DebugService } from './devthings/debug-service.service';
@@ -47,7 +46,6 @@ import { DebugService } from './devthings/debug-service.service';
         { path: 'mychannels', component: MychannelsComponent, canActivate: [AuthGuardService] },
         { path: 'login', component: DummyChannelsComponent },
         { path: 'oauth_redirect', component: TestComponent },
-        { path: 'embeds/:id', component: TwEmbedsComponent },
         { path: 'dummy', component: DummyChannelsComponent },
         { path: 'auto_redirect', redirectTo: 'mychannels', pathMatch: 'full' }
       ],
@@ -75,7 +73,6 @@ import { DebugService } from './devthings/debug-service.service';
     OauthComponent,
     ResizePipe,
     TwEmbedComponent,
-    TwEmbedsComponent,
     DummyChannelsComponent,
     DebugPanelComponent
   ],
