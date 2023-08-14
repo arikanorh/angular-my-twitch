@@ -1,92 +1,145 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { DebugService } from '../../devthings/debug-service.service';
-import { VideoState } from '../../model/VideoStates';
-import Twitch from '../../../assets/scripts/twitch.js';
+
+
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DebugService } from 'src/app/devthings/debug-service.service';
+import { Stream } from 'src/app/model/Stream';
+import { VideoState } from 'src/app/model/VideoStates';
+import { TwitchService } from 'src/app/twitch.service';
+import { TwEmbedComponent } from '../tw-embed/tw-embed.component';
 
 @Component({
-  selector: 'app-tw-embed',
-  templateUrl: './tw-embed.component.html',
-  styleUrls: ['./tw-embed.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-tw-embeds',
+  templateUrl: './tw-embeds.component.html',
+  styleUrls: ['./tw-embeds.component.css']
 })
-export class TwEmbedComponent implements OnInit {
-  player;
-  _id;
-  @Input() set id(value: string) {
-    if (this.player) {
-      this.debugService.addLog(
-        'Updating channel from ' + this._id + ' to ' + value
-      );
-      this.player.setChannel(value);
-    }
-    this._id = value;
+export class TwEmbedsComponent implements OnInit {
+  @ViewChild("embed") video: ElementRef;
+  @ViewChild(TwEmbedComponent) embed: TwEmbedComponent;
+
+  ids: Stream[]
+  index = 0;
+
+
+  showList: boolean = false;
+  idle: boolean = false;
+
+  id;
+  playAll: boolean = false;
+  selectedStream: Stream;
+  refreshRequest: boolean = false;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private twitch: TwitchService,
+    private debugService: DebugService) {
+
+    this.id = this.route.snapshot.paramMap.get('id');
+
+    twitch.getFavStreams().subscribe(e => {
+      if (e) {
+        this.ids = e;
+        this.setIndexAndUpdateStream();
+        this.getStreamFromId();
+      }
+    })
   }
 
-  embed;
-  @Output() videostatechange = new EventEmitter<any>();
-
-  constructor(private debugService: DebugService) {}
 
   ngOnInit() {
-    let self = this;
 
-    let embed = new Twitch.Player('twitch-embed', {
-      width: '100%',
-      height: '100%',
-      channel: this._id,
-      autoplay: true,
-      // Only needed if this page is going to be embedded on other websites
-      parent: [this.getBaseUrl()],
-    });
-    this.player = embed.getPlayer();
 
-    embed.addEventListener(Twitch.Embed.VIDEO_READY, function () {
-      self.debugService.addLog('Settings volume to 100%');
-      self.player.setVolume(1);
-      self.videostatechange.emit({
-        id: self._id,
-        type: VideoState.VIDEO_READY,
-      });
-    });
+    this.route.params.subscribe(params => {
 
-    embed.addEventListener(Twitch.Embed.VIDEO_PLAY, function (e) {
-      self.videostatechange.emit({ id: self._id, type: VideoState.VIDEO_PLAY });
-    });
+      let id = params.id;
+      if (this.ids) {
+        this.selectedStream = this.ids.find(e => e.user_login === this.id);
+      }
 
-    embed.addEventListener(Twitch.Embed.VIDEO_PAUSE, function () {
-      self.videostatechange.emit({
-        id: self._id,
-        type: VideoState.VIDEO_PAUSE,
-      });
-    });
+      if (this.id !== id) {
+        this.id = id;
+        // this.getStreamFromId();
+      }
+    })
 
-    this.embed = embed;
+    window.addEventListener("keydown", this.eventListener);
   }
 
-  pause() {
-    this.player.pause();
+
+
+  ngOnDestroy() {
+    window.removeEventListener("keydown", this.eventListener);
   }
 
-  play() {
-    this.player.play();
+  eventListener = (e: any) => {
+    this.debugService.addLog("Key : " + e.key);
+
+
+    if (e.key === "ArrowUp") {
+      this.video.nativeElement.webkitRequestFullScreen();
+    } else if (e.key === "ArrowRight") {
+      this.index++;
+      this.setIndexAndUpdateStream();
+      this.idle = false;
+    } else if (e.key === "ArrowLeft") {
+      this.index--;
+      this.setIndexAndUpdateStream();
+      this.idle = false;
+    } else if (e.key === "Enter") {
+      this.router.navigate(['embeds', this.selectedStream.user_login]);
+    } else if (e.key === "ArrowDown") {
+      if (!this.refreshRequest) {
+        this.refreshRequest = true;
+        this.debugService.addLog("Ready to reload channe list. Press " + e.key + " to reload");
+
+      }
+      else {
+        this.refreshRequest = false;
+        this.twitch.loadFavs();
+        this.debugService.addLog("Reloading channel list");
+
+      }
+    }
+  };
+
+  toggleList() {
+    this.showList = !this.showList;
   }
 
-  getBaseUrl() {
-    return window.location.hostname;
+  setIndexAndUpdateStream() {
+
+    if (this.index >= this.ids.length) {
+      this.index = 0;
+      // this.twitch.loadFavs();
+    }
+    else if (this.index < 0) {
+      this.index = this.ids.length - 1;
+    }
+    this.selectedStream = this.ids[this.index];
   }
 
-  getVolume() {
-    this.player.getVolume();
+  private getStreamFromId() {
+    if (this.ids) {
+      this.index = this.ids.findIndex((e: Stream) => e.user_login === this.id);
+      this.setIndexAndUpdateStream();
+    }
   }
 
-  setVolume(vol) {
-    this.player.setVolume(vol);
+  videostatechange(e) {
+    let videoState: VideoState = e.type;
+    this.debugService.addLog("Video state changed to : " + VideoState[videoState])
+
+    if (videoState == VideoState.VIDEO_PLAY) {
+      this.idle = true;
+    } else if (videoState == VideoState.VIDEO_PAUSE) {
+      this.idle = false;
+    }
   }
+
+  toggleSound() {
+    this.debugService.addLog("Video cover clicked");
+    this.embed.setVolume(1);
+  }
+
+
 }
