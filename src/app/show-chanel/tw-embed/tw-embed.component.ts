@@ -54,10 +54,6 @@ export class TwEmbedComponent implements OnInit {
       self.videostatechange.emit({ id: self._id, type: VideoState.VIDEO_PLAY });
     });
 
-    embed.addEventListener(Twitch.Embed.PLAYBACK_BLOCKED, function (e) {
-      self.debugService.addLog("PLAYBACK_BLOCKED");
-    });
-
     embed.addEventListener(Twitch.Embed.VIDEO_PAUSE, function () {
       self.videostatechange.emit({ id: self._id, type: VideoState.VIDEO_PAUSE });
     });
