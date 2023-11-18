@@ -11,9 +11,11 @@
 
  .video-cover {
      position: absolute;
-     width: 100%;
-     height: 0%;
+     width: 70%;
+     height: 30%;
      z-index: 1;
+     background-color: red;
+     right: 0;
  }
 
  .video-cover2 {
@@ -22,4 +24,5 @@
      height: 100%;
      z-index: 1;
      right: 0;
+     background-color: red;
  }
