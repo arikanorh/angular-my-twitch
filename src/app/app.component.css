@@ -54,6 +54,7 @@ p {
   flex: 1;
   height: 100%;
   padding-left: 10px;
+  align-items: center;
   
 }
 .nav-right{
@@ -140,4 +141,9 @@ p {
 }
 .debug:hover::after{
   opacity: 1;
+}
+
+.version{
+  font-size: 12px;
+  margin-left: 5px;
 }
